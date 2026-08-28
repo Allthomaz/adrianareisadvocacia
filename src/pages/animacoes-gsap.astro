@@ -1,0 +1,688 @@
+---
+import { ArrowLeft, ArrowUpRight } from "@lucide/astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { practiceAreas, whatsappUrl } from "../data/site";
+---
+
+<BaseLayout
+  title="Laboratório de movimento | Adriana Reis Advocacia"
+  description="Ensaio interno de animações cinematográficas para as áreas de atuação."
+  noindex
+  chrome={false}
+>
+  <a class="cinema-back" href="/">
+    <ArrowLeft aria-hidden="true" size={16} stroke-width={1.5} />
+    Voltar à homepage
+  </a>
+
+  <div class="cinema" data-cinema-root>
+    <header class="cinema-intro">
+      <p class="cinema-intro__label">Laboratório de movimento · GSAP</p>
+      <p class="cinema-intro__number" aria-hidden="true">03</p>
+      <div class="cinema-intro__content">
+        <p class="cinema-kicker"><span></span> Direção cinematográfica</p>
+        <h1>Três áreas.<br />Três atmosferas.</h1>
+        <p>
+          Role para experimentar uma abertura editorial em capítulos. O gesto
+          conduz o ritmo; a informação continua no centro da experiência.
+        </p>
+      </div>
+      <span class="cinema-intro__scroll" aria-hidden="true"
+        >Role para explorar ↓</span
+      >
+    </header>
+
+    {
+      practiceAreas.map((area) => (
+        <section
+          class={`cinema-chapter cinema-chapter--${area.tone} cinema-chapter--${area.slug}`}
+          aria-labelledby={`cinema-${area.slug}`}
+          data-cinema-chapter
+        >
+          <div class="cinema-chapter__wash" data-cinema-wash />
+          <span
+            class="cinema-chapter__number"
+            aria-hidden="true"
+            data-cinema-number
+          >
+            {area.number}
+          </span>
+
+          <div class="cinema-chapter__grid">
+            <header class="cinema-chapter__heading">
+              <p class="cinema-kicker" data-cinema-kicker>
+                <span /> Frente {area.number}
+              </p>
+              <h2 id={`cinema-${area.slug}`} data-cinema-title>
+                {area.title}
+              </h2>
+              <p data-cinema-intro>{area.introduction}</p>
+            </header>
+
+            <div class="cinema-chapter__body">
+              <p class="cinema-chapter__prompt" data-cinema-prompt>
+                Situações que podem exigir análise jurídica
+              </p>
+              <div class="cinema-cards">
+                {area.examples.map((example, index) => (
+                  <article class="cinema-card" data-cinema-card>
+                    <span aria-hidden="true">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <h3>{example.title}</h3>
+                    <p>{example.description}</p>
+                  </article>
+                ))}
+              </div>
+              <a
+                class="cinema-cta"
+                href={whatsappUrl}
+                target="_blank"
+                rel="noreferrer"
+                data-cinema-cta
+              >
+                Apresentar minha situação
+                <ArrowUpRight aria-hidden="true" size={18} stroke-width={1.5} />
+              </a>
+            </div>
+          </div>
+        </section>
+      ))
+    }
+
+    <footer class="cinema-end">
+      <p class="cinema-kicker"><span></span> Fim do ensaio</p>
+      <h2>Movimento que organiza, não distrai.</h2>
+      <a href="/">Voltar à versão atual</a>
+    </footer>
+  </div>
+</BaseLayout>
+
+<style>
+  .cinema {
+    overflow: clip;
+    background: var(--color-ivory-50);
+  }
+
+  .cinema-back {
+    position: fixed;
+    z-index: 100;
+    top: 0.85rem;
+    right: 0.85rem;
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: 0.55rem;
+    padding-inline: 0.9rem;
+    border: 1px solid rgb(255 255 255 / 62%);
+    background: rgb(247 242 233 / 72%);
+    box-shadow: 0 0.7rem 2rem rgb(40 36 34 / 9%);
+    backdrop-filter: blur(20px);
+    color: var(--color-wine-700);
+    font-size: 0.67rem;
+    font-weight: 750;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .cinema-intro {
+    position: relative;
+    display: grid;
+    min-height: 100svh;
+    overflow: hidden;
+    align-content: center;
+    padding: 6rem var(--gutter) 4rem;
+    background:
+      radial-gradient(
+        circle at 78% 18%,
+        rgb(183 138 85 / 16%),
+        transparent 26rem
+      ),
+      linear-gradient(135deg, #f9f4ec, #eee3d3);
+    isolation: isolate;
+  }
+
+  .cinema-intro__label {
+    position: absolute;
+    top: 1.45rem;
+    left: var(--gutter);
+    margin: 0;
+    color: var(--color-wine-700);
+    font-size: 0.62rem;
+    font-weight: 750;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 47.99rem) {
+    .cinema-intro__label {
+      top: 5.2rem;
+    }
+  }
+
+  .cinema-intro__number {
+    position: absolute;
+    z-index: -1;
+    right: -0.08em;
+    bottom: -0.28em;
+    margin: 0;
+    color: rgb(118 38 56 / 7%);
+    font-family: var(--font-display);
+    font-size: clamp(18rem, 68vw, 42rem);
+    line-height: 0.8;
+  }
+
+  .cinema-intro__content {
+    width: min(100%, 61rem);
+  }
+
+  .cinema-kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 1.25rem;
+    color: var(--color-wine-700);
+    font-size: 0.64rem;
+    font-weight: 750;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  .cinema-kicker span {
+    width: 2.5rem;
+    height: 1px;
+    background: var(--color-gold-500);
+  }
+
+  .cinema-intro h1,
+  .cinema-end h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 15vw, 10rem);
+    font-weight: 440;
+    letter-spacing: -0.035em;
+    line-height: 0.84;
+  }
+
+  .cinema-intro__content > p:last-child {
+    max-width: 35rem;
+    margin: 2rem 0 0;
+    color: rgb(40 36 34 / 70%);
+    line-height: 1.8;
+  }
+
+  .cinema-intro__scroll {
+    position: absolute;
+    bottom: 1.5rem;
+    left: var(--gutter);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .cinema-chapter {
+    position: relative;
+    min-height: 100svh;
+    overflow: hidden;
+    padding: clamp(7rem, 15vw, 12rem) var(--gutter);
+    isolation: isolate;
+  }
+
+  .cinema-chapter--ivory,
+  .cinema-chapter--sand {
+    color: var(--color-graphite-900);
+  }
+
+  .cinema-chapter--wine {
+    color: var(--color-ivory-50);
+  }
+
+  .cinema-chapter__wash {
+    position: absolute;
+    z-index: -3;
+    inset: 0;
+  }
+
+  .cinema-chapter--ivory .cinema-chapter__wash {
+    background:
+      radial-gradient(
+        circle at 84% 18%,
+        rgb(183 138 85 / 15%),
+        transparent 28rem
+      ),
+      var(--color-ivory-50);
+  }
+
+  .cinema-chapter--wine .cinema-chapter__wash {
+    background:
+      radial-gradient(
+        circle at 82% 15%,
+        rgb(255 255 255 / 8%),
+        transparent 25rem
+      ),
+      var(--color-wine-700);
+  }
+
+  .cinema-chapter--sand .cinema-chapter__wash {
+    background:
+      radial-gradient(
+        circle at 15% 82%,
+        rgb(118 38 56 / 8%),
+        transparent 28rem
+      ),
+      var(--color-ivory-100);
+  }
+
+  .cinema-chapter__number {
+    position: absolute;
+    z-index: -2;
+    top: 0.03em;
+    right: -0.05em;
+    color: rgb(118 38 56 / 7%);
+    font-family: var(--font-display);
+    font-size: clamp(18rem, 52vw, 38rem);
+    line-height: 0.8;
+    pointer-events: none;
+  }
+
+  .cinema-chapter--wine .cinema-chapter__number {
+    color: rgb(255 255 255 / 8%);
+  }
+
+  .cinema-chapter__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: min(100%, var(--container));
+    margin-inline: auto;
+    gap: clamp(4rem, 10vw, 9rem);
+  }
+
+  .cinema-chapter__heading h2 {
+    max-width: 10ch;
+    margin: 0 0 1.6rem;
+    font-family: var(--font-display);
+    font-size: clamp(3.7rem, 14vw, 7.6rem);
+    font-weight: 440;
+    letter-spacing: -0.035em;
+    line-height: 0.87;
+  }
+
+  .cinema-chapter--direito-previdenciario .cinema-chapter__heading h2 {
+    font-size: clamp(3.15rem, 12vw, 6.7rem);
+  }
+
+  .cinema-chapter__heading > p:last-child {
+    max-width: 30rem;
+    margin: 0;
+    color: rgb(40 36 34 / 70%);
+    line-height: 1.78;
+  }
+
+  .cinema-chapter--wine .cinema-kicker,
+  .cinema-chapter--wine .cinema-chapter__heading > p:last-child {
+    color: rgb(247 242 233 / 72%);
+  }
+
+  .cinema-chapter__prompt {
+    margin: 0 0 1.25rem;
+    color: var(--color-wine-700);
+    font-size: 0.62rem;
+    font-weight: 750;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  .cinema-chapter--wine .cinema-chapter__prompt {
+    color: rgb(247 242 233 / 66%);
+  }
+
+  .cinema-cards {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .cinema-card {
+    min-width: 0;
+    padding: 1.35rem;
+    border: 1px solid rgb(118 38 56 / 10%);
+    background: rgb(255 252 247 / 70%);
+    box-shadow: 0 0.8rem 2.3rem rgb(40 36 34 / 5%);
+    backdrop-filter: blur(16px);
+  }
+
+  .cinema-chapter--wine .cinema-card {
+    border-color: rgb(255 255 255 / 10%);
+    background: rgb(95 28 44 / 42%);
+    box-shadow: 0 0.9rem 2.5rem rgb(40 10 18 / 12%);
+  }
+
+  .cinema-card > span {
+    color: var(--color-gold-500);
+    font-size: 0.58rem;
+    font-weight: 750;
+    letter-spacing: 0.12em;
+  }
+
+  .cinema-card h3 {
+    margin: 0.7rem 0 0.65rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 5vw, 2rem);
+    font-weight: 480;
+    line-height: 1;
+  }
+
+  .cinema-card p {
+    margin: 0;
+    color: rgb(40 36 34 / 66%);
+    font-size: 0.83rem;
+    line-height: 1.65;
+  }
+
+  .cinema-chapter--wine .cinema-card p {
+    color: rgb(247 242 233 / 68%);
+  }
+
+  .cinema-cta {
+    display: inline-flex;
+    min-height: 3.2rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    margin-top: 1rem;
+    padding-inline: 1.15rem;
+    background: var(--color-wine-700);
+    color: var(--color-ivory-50);
+    font-size: 0.69rem;
+    font-weight: 750;
+  }
+
+  .cinema-chapter--wine .cinema-cta {
+    background: var(--color-ivory-50);
+    color: var(--color-wine-700);
+  }
+
+  .cinema-end {
+    display: grid;
+    min-height: 75svh;
+    place-content: center;
+    padding: 6rem var(--gutter);
+    background: var(--color-graphite-900);
+    color: var(--color-ivory-50);
+    text-align: center;
+  }
+
+  .cinema-end .cinema-kicker {
+    justify-content: center;
+    color: rgb(247 242 233 / 62%);
+  }
+
+  .cinema-end h2 {
+    max-width: 10ch;
+    font-size: clamp(3.4rem, 11vw, 7.5rem);
+  }
+
+  .cinema-end > a {
+    justify-self: center;
+    margin-top: 2.5rem;
+    border-bottom: 1px solid rgb(247 242 233 / 45%);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  @media (min-width: 48rem) {
+    .cinema-cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .cinema-chapter__grid {
+      grid-template-columns: minmax(21rem, 0.8fr) minmax(0, 1.2fr);
+      align-items: start;
+    }
+
+    .cinema-chapter__heading {
+      position: sticky;
+      top: 8rem;
+    }
+
+    .cinema-chapter__heading h2 {
+      font-size: clamp(5rem, 7vw, 7.4rem);
+    }
+
+    .cinema-chapter--direito-previdenciario .cinema-chapter__heading h2 {
+      font-size: clamp(4.15rem, 5.3vw, 6rem);
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const root = document.querySelector<HTMLElement>("[data-cinema-root]");
+
+  if (root) {
+    const media = gsap.matchMedia();
+
+    media.add(
+      {
+        desktop: "(min-width: 768px)",
+        reduceMotion: "(prefers-reduced-motion: reduce)",
+      },
+      (context) => {
+        const { desktop, reduceMotion } = context.conditions as {
+          desktop: boolean;
+          reduceMotion: boolean;
+        };
+        const chapters = gsap.utils.toArray<HTMLElement>(
+          "[data-cinema-chapter]",
+          root,
+        );
+
+        if (reduceMotion) {
+          gsap.set(
+            root.querySelectorAll(
+              ".cinema-intro__label, .cinema-intro__number, .cinema-intro__content > *, .cinema-intro__scroll",
+            ),
+            { clearProps: "all" },
+          );
+          chapters.forEach((chapter) =>
+            gsap.set(
+              chapter.querySelectorAll(
+                "[data-cinema-wash], [data-cinema-number], [data-cinema-kicker], [data-cinema-title], [data-cinema-intro], [data-cinema-prompt], [data-cinema-card], [data-cinema-cta]",
+              ),
+              { clearProps: "all" },
+            ),
+          );
+          return;
+        }
+
+        gsap
+          .timeline({ defaults: { ease: "power3.out" } })
+          .fromTo(
+            ".cinema-intro__label",
+            { autoAlpha: 0, y: -14 },
+            { autoAlpha: 1, y: 0, duration: 0.45 },
+          )
+          .fromTo(
+            ".cinema-intro__number",
+            { autoAlpha: 0, scale: 1.08, yPercent: 8 },
+            { autoAlpha: 1, scale: 1, yPercent: 0, duration: 1.15 },
+            0,
+          )
+          .fromTo(
+            ".cinema-intro__content > *",
+            { autoAlpha: 0, y: desktop ? 46 : 28 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: desktop ? 0.78 : 0.62,
+              stagger: desktop ? 0.12 : 0.09,
+            },
+            0.16,
+          )
+          .fromTo(
+            ".cinema-intro__scroll",
+            { autoAlpha: 0, y: -12 },
+            { autoAlpha: 1, y: 0, duration: 0.45 },
+            0.72,
+          );
+
+        chapters.forEach((chapter, chapterIndex) => {
+          const wash = chapter.querySelector("[data-cinema-wash]");
+          const number = chapter.querySelector("[data-cinema-number]");
+          const kicker = chapter.querySelector("[data-cinema-kicker]");
+          const title = chapter.querySelector("[data-cinema-title]");
+          const introduction = chapter.querySelector("[data-cinema-intro]");
+          const prompt = chapter.querySelector("[data-cinema-prompt]");
+          const cards = chapter.querySelectorAll("[data-cinema-card]");
+          const cta = chapter.querySelector("[data-cinema-cta]");
+
+          const timeline = gsap.timeline({
+            defaults: { ease: "power3.out" },
+            scrollTrigger: {
+              id: `cinema-chapter-${chapterIndex + 1}`,
+              trigger: chapter,
+              start: desktop ? "top 88%" : "top 92%",
+              end: desktop ? "top 5%" : "top 15%",
+              scrub: desktop ? 1.35 : 0.9,
+              invalidateOnRefresh: true,
+            },
+          });
+
+          timeline
+            .fromTo(
+              wash,
+              { scaleY: 0.72, transformOrigin: "bottom center" },
+              { scaleY: 1, duration: 1.1, ease: "none" },
+              0,
+            )
+            .fromTo(
+              number,
+              { autoAlpha: 0, scale: 1.2, yPercent: 18 },
+              { autoAlpha: 1, scale: 1, yPercent: 0, duration: 0.8 },
+              0,
+            )
+            .fromTo(
+              kicker,
+              { autoAlpha: 0, x: desktop ? -42 : -29 },
+              { autoAlpha: 1, x: 0, duration: 0.42 },
+              0.12,
+            )
+            .fromTo(
+              title,
+              { autoAlpha: 0, x: desktop ? -110 : -53, y: desktop ? 24 : 17 },
+              { autoAlpha: 1, x: 0, y: 0, duration: 0.72 },
+              0.18,
+            )
+            .fromTo(
+              introduction,
+              { autoAlpha: 0, y: desktop ? 34 : 24 },
+              { autoAlpha: 1, y: 0, duration: 0.5 },
+              0.42,
+            )
+            .fromTo(
+              prompt,
+              { autoAlpha: 0, y: desktop ? 18 : 22 },
+              { autoAlpha: 1, y: 0, duration: 0.36 },
+              0.5,
+            );
+
+          if (desktop) {
+            timeline
+              .fromTo(
+                cards,
+                {
+                  autoAlpha: 0,
+                  y: 64,
+                  scale: 0.94,
+                  transformOrigin: "center bottom",
+                },
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  scale: 1,
+                  duration: 0.78,
+                  stagger: 0.11,
+                },
+                0.58,
+              )
+              .fromTo(
+                cta,
+                { autoAlpha: 0, y: 24 },
+                { autoAlpha: 1, y: 0, duration: 0.52 },
+                0.96,
+              );
+          } else {
+            gsap.set(cards, {
+              autoAlpha: 0,
+              y: 46,
+              scale: 0.964,
+              transformOrigin: "center bottom",
+            });
+
+            ScrollTrigger.batch(cards, {
+              start: "top 88%",
+              once: true,
+              interval: 0.08,
+              batchMax: 2,
+              onEnter: (batch) =>
+                gsap.to(batch, {
+                  autoAlpha: 1,
+                  y: 0,
+                  scale: 1,
+                  duration: 0.78,
+                  ease: "power3.out",
+                  stagger: 0.13,
+                  overwrite: "auto",
+                }),
+            });
+
+            gsap.fromTo(
+              cta,
+              { autoAlpha: 0, y: 24 },
+              {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.68,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: cta,
+                  start: "top 92%",
+                  once: true,
+                },
+              },
+            );
+          }
+
+          gsap.fromTo(
+            number,
+            { rotation: desktop ? -2 : -1 },
+            {
+              rotation: desktop ? 2 : 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: chapter,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.8,
+              },
+            },
+          );
+        });
+
+        requestAnimationFrame(() => ScrollTrigger.refresh());
+      },
+      root,
+    );
+
+    document.addEventListener("astro:before-swap", () => media.revert(), {
+      once: true,
+    });
+  }
+</script>

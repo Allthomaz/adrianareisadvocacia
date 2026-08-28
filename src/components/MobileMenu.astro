@@ -1,0 +1,56 @@
+---
+import { whatsappUrl } from "../data/site";
+
+interface Props {
+  currentPath: string;
+  items: ReadonlyArray<{ label: string; href: string }>;
+  isLandingPage?: boolean;
+}
+
+const { currentPath, items, isLandingPage = false } = Astro.props;
+const isCurrent = (href: string) =>
+  href === "/" ? currentPath === "/" : currentPath.startsWith(href);
+---
+
+<button
+  class="menu-toggle"
+  type="button"
+  aria-label="Abrir menu"
+  aria-expanded="false"
+  aria-controls="mobile-navigation"
+  data-menu-toggle
+>
+  <span aria-hidden="true"></span>
+  <span aria-hidden="true"></span>
+</button>
+
+<div class="mobile-backdrop" data-menu-backdrop hidden></div>
+
+<div class="mobile-panel" id="mobile-navigation" data-mobile-panel hidden>
+  <nav aria-label="Navegação móvel">
+    <ul>
+      {
+        items.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={
+                !isLandingPage && isCurrent(item.href) ? "page" : undefined
+              }
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <a
+      class="button button--primary mobile-panel__cta"
+      href={whatsappUrl}
+      target="_blank"
+      rel="noreferrer"
+    >
+      Falar no WhatsApp
+    </a>
+  </nav>
+</div>

@@ -1,0 +1,86 @@
+---
+import type { PracticeArea } from "../data/site";
+import { whatsappUrl } from "../data/site";
+
+interface Props {
+  area: PracticeArea;
+}
+
+const { area } = Astro.props;
+const firstColumn = area.examples.slice(0, 3);
+const secondColumn = area.examples.slice(3);
+---
+
+<section
+  class={`practice-chapter practice-chapter--${area.tone} practice-chapter--${area.slug}`}
+  id={area.slug}
+  aria-labelledby={`${area.slug}-title`}
+  data-practice-chapter
+>
+  <span
+    class="practice-chapter__cinema-wash"
+    aria-hidden="true"
+    data-practice-wash></span>
+  <span
+    class="practice-chapter__watermark"
+    aria-hidden="true"
+    data-practice-number
+  >
+    {area.number}
+  </span>
+
+  <div class="practice-chapter__grid container">
+    <header class="practice-chapter__header">
+      <p class="eyebrow practice-chapter__eyebrow" data-practice-kicker>
+        <span aria-hidden="true"></span> Frente {area.number}
+      </p>
+      <h2 id={`${area.slug}-title`} data-practice-title>{area.title}</h2>
+      <p data-practice-intro>{area.introduction}</p>
+    </header>
+
+    <div class="practice-chapter__body">
+      <p class="practice-chapter__prompt" data-practice-prompt>
+        Situações que podem exigir análise jurídica
+      </p>
+
+      <div class="practice-chapter__cards">
+        {
+          [firstColumn, secondColumn].map((column, columnIndex) => (
+            <div class="practice-chapter__column">
+              {column.map((example, itemIndex) => {
+                const itemNumber = columnIndex * 3 + itemIndex + 1;
+                return (
+                  <article
+                    class="practice-card"
+                    data-practice-card
+                    aria-labelledby={`${area.slug}-item-${itemNumber}`}
+                  >
+                    <span class="practice-card__number" aria-hidden="true">
+                      {String(itemNumber).padStart(2, "0")}
+                    </span>
+                    <h3 id={`${area.slug}-item-${itemNumber}`}>
+                      {example.title}
+                    </h3>
+                    <p>{example.description}</p>
+                  </article>
+                );
+              })}
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="practice-chapter__conversion" data-practice-cta>
+        <p>Não encontrou sua situação entre os exemplos?</p>
+        <a
+          class={`button ${area.tone === "wine" ? "button--light" : "button--primary"}`}
+          href={whatsappUrl}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Apresentar minha situação <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

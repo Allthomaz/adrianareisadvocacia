@@ -1,0 +1,12 @@
+dist/
+.astro/
+.venv/
+.rembg-models/
+node_modules/
+.agents/
+docs/
+pesquisa-estrategica
+START-HERE.md
+assets/references/
+public/images/brand/
+src/assets/images/

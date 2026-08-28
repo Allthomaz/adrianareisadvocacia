@@ -1,0 +1,53 @@
+---
+const steps = [
+  {
+    number: "01",
+    title: "Contexto",
+    description:
+      "Organize uma descrição objetiva da situação e das principais dúvidas que precisam ser compreendidas.",
+  },
+  {
+    number: "02",
+    title: "Documentos",
+    description:
+      "Separe os registros e documentos relacionados ao caso para facilitar uma avaliação individual.",
+  },
+  {
+    number: "03",
+    title: "Próximos passos",
+    description:
+      "A análise do contexto ajuda a esclarecer possibilidades e os cuidados jurídicos aplicáveis.",
+  },
+] as const;
+---
+
+<section
+  class="first-steps"
+  id="como-comecar"
+  aria-labelledby="first-steps-title"
+>
+  <div class="container">
+    <header class="first-steps__header">
+      <p class="eyebrow"><span aria-hidden="true"></span> Como começar</p>
+      <div>
+        <h2 id="first-steps-title">O primeiro passo começa com clareza.</h2>
+        <p>
+          Antes de qualquer orientação, cada situação precisa ser compreendida
+          em seu próprio contexto.
+        </p>
+      </div>
+    </header>
+
+    <ol class="first-steps__list">
+      {
+        steps.map((step) => (
+          <li>
+            <span class="first-steps__number">{step.number}</span>
+            <h3>{step.title}</h3>
+            <p>{step.description}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

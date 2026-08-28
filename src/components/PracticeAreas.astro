@@ -1,0 +1,264 @@
+---
+import { ArrowUpRight } from "@lucide/astro";
+import { practiceAreas } from "../data/site";
+import PracticeChapter from "./PracticeChapter.astro";
+
+interface Props {
+  landing?: boolean;
+}
+
+const { landing = false } = Astro.props;
+const visibleAreas = practiceAreas;
+---
+
+{
+  landing ? (
+    <>
+      <section
+        class="practice-overview"
+        id="atuacao"
+        aria-labelledby="practice-title"
+      >
+        <div class="practice-overview__grid container">
+          <p class="eyebrow">
+            <span aria-hidden="true" /> Frentes de atuação
+          </p>
+          <div>
+            <h2 id="practice-title">Situações jurídicas, em termos claros.</h2>
+            <p>
+              Conheça exemplos de questões que podem estar presentes em cada
+              frente. O enquadramento e os caminhos possíveis dependem sempre da
+              análise individual.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {visibleAreas.map((area) => (
+        <PracticeChapter area={area} />
+      ))}
+    </>
+  ) : (
+    <section class="practice" id="atuacao" aria-labelledby="practice-title">
+      <div class="container">
+        <header class="practice__header">
+          <p class="eyebrow">
+            <span aria-hidden="true" /> Frentes de atuação
+          </p>
+          <div>
+            <h2 id="practice-title">Atuação jurídica</h2>
+            <p>
+              Cada situação demanda compreensão cuidadosa do contexto, dos
+              documentos e das possibilidades jurídicas aplicáveis.
+            </p>
+          </div>
+        </header>
+
+        <ol class="practice__list">
+          {visibleAreas.map((area) => (
+            <li>
+              <a href={area.href}>
+                <span class="practice__number">{area.number}</span>
+                <h3>{area.title}</h3>
+                <p>{area.description}</p>
+                <span class="practice__link">
+                  Entenda a atuação{" "}
+                  <ArrowUpRight
+                    aria-hidden="true"
+                    size={19}
+                    stroke-width={1.5}
+                  />
+                </span>
+              </a>
+            </li>
+          ))}
+        </ol>
+        <p class="practice__pending">
+          Os exemplos apresentados são informativos e cada situação exige
+          análise individual.
+        </p>
+      </div>
+    </section>
+  )
+}
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const chapters = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-practice-chapter]"),
+  );
+
+  if (chapters.length) {
+    const media = gsap.matchMedia();
+
+    media.add(
+      {
+        reduceMotion: "(prefers-reduced-motion: reduce)",
+        desktop: "(min-width: 768px)",
+      },
+      (context) => {
+        const { reduceMotion, desktop } = context.conditions as {
+          reduceMotion: boolean;
+          desktop: boolean;
+        };
+
+        if (reduceMotion) {
+          chapters.forEach((chapter) => {
+            gsap.set(
+              chapter.querySelectorAll(
+                "[data-practice-wash], [data-practice-number], [data-practice-kicker], [data-practice-title], [data-practice-intro], [data-practice-prompt], [data-practice-card], [data-practice-cta]",
+              ),
+              { clearProps: "all" },
+            );
+          });
+          return;
+        }
+
+        chapters.forEach((chapter, chapterIndex) => {
+          const wash = chapter.querySelector("[data-practice-wash]");
+          const number = chapter.querySelector("[data-practice-number]");
+          const kicker = chapter.querySelector("[data-practice-kicker]");
+          const title = chapter.querySelector("[data-practice-title]");
+          const introduction = chapter.querySelector("[data-practice-intro]");
+          const prompt = chapter.querySelector("[data-practice-prompt]");
+          const cards = chapter.querySelectorAll("[data-practice-card]");
+          const cardsGrid = chapter.querySelector(".practice-chapter__cards");
+          const cta = chapter.querySelector("[data-practice-cta]");
+          const orderedCards = desktop
+            ? [
+                cards[0],
+                cards[3],
+                cards[1],
+                cards[4],
+                cards[2],
+                cards[5],
+              ].filter(Boolean)
+            : Array.from(cards);
+
+          const timeline = gsap.timeline({
+            defaults: { ease: "power3.out" },
+            scrollTrigger: {
+              id: `practice-chapter-${chapterIndex + 1}`,
+              trigger: chapter,
+              start: desktop ? "top 88%" : "top 92%",
+              end: desktop ? "top 5%" : "top 15%",
+              scrub: desktop ? 1.35 : 0.9,
+              invalidateOnRefresh: true,
+            },
+          });
+
+          timeline
+            .fromTo(
+              wash,
+              { autoAlpha: 0, scaleY: 0.72, transformOrigin: "bottom center" },
+              { autoAlpha: 1, scaleY: 1, duration: 1.1, ease: "none" },
+              0,
+            )
+            .fromTo(
+              number,
+              {
+                autoAlpha: 0,
+                scale: desktop ? 1.2 : 1.24,
+                yPercent: desktop ? 18 : 22,
+              },
+              { autoAlpha: 1, scale: 1, yPercent: 0, duration: 0.8 },
+              0,
+            )
+            .fromTo(
+              kicker,
+              { autoAlpha: 0, x: desktop ? -42 : -29 },
+              { autoAlpha: 1, x: 0, duration: 0.42 },
+              0.12,
+            )
+            .fromTo(
+              title,
+              {
+                autoAlpha: 0,
+                x: desktop ? -110 : -53,
+                y: desktop ? 24 : 17,
+              },
+              { autoAlpha: 1, x: 0, y: 0, duration: 0.72 },
+              0.18,
+            )
+            .fromTo(
+              introduction,
+              { autoAlpha: 0, y: desktop ? 34 : 24 },
+              { autoAlpha: 1, y: 0, duration: 0.5 },
+              0.42,
+            )
+            .fromTo(
+              prompt,
+              { autoAlpha: 0, y: desktop ? 18 : 22 },
+              { autoAlpha: 1, y: 0, duration: 0.36 },
+              0.5,
+            );
+
+          gsap.set(orderedCards, {
+            autoAlpha: 0,
+            y: desktop ? 64 : 46,
+            scale: desktop ? 0.94 : 0.964,
+            transformOrigin: "center bottom",
+          });
+
+          ScrollTrigger.create({
+            id: `practice-cards-${chapterIndex + 1}`,
+            trigger: cardsGrid,
+            start: desktop ? "top 82%" : "top 88%",
+            once: true,
+            onEnter: () =>
+              gsap.to(orderedCards, {
+                autoAlpha: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.78,
+                ease: "power3.out",
+                stagger: desktop ? 0.11 : 0.13,
+                overwrite: "auto",
+              }),
+          });
+
+          gsap.fromTo(
+            cta,
+            { autoAlpha: 0, y: desktop ? 24 : 29 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: desktop ? 0.52 : 0.68,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: cta,
+                start: "top 92%",
+                once: true,
+              },
+            },
+          );
+
+          gsap.fromTo(
+            number,
+            { rotation: desktop ? -2 : -1.2 },
+            {
+              rotation: desktop ? 2 : 1.2,
+              ease: "none",
+              scrollTrigger: {
+                trigger: chapter,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.8,
+              },
+            },
+          );
+        });
+
+        requestAnimationFrame(() => ScrollTrigger.refresh());
+      },
+    );
+
+    document.addEventListener("astro:before-swap", () => media.revert(), {
+      once: true,
+    });
+  }
+</script>

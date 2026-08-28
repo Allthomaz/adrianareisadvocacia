@@ -1,0 +1,19 @@
+---
+import AboutPreview from "../components/AboutPreview.astro";
+import ContactCallout from "../components/ContactCallout.astro";
+import FirstSteps from "../components/FirstSteps.astro";
+import Hero from "../components/Hero.astro";
+import PracticeAreas from "../components/PracticeAreas.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Direito Civil, Trabalhista e Previdenciário | Adriana Reis Advocacia"
+  description="Atuação de Adriana Reis em Direito Civil, Trabalhista e Previdenciário. Apresente sua situação e inicie uma conversa pelo WhatsApp."
+>
+  <Hero />
+  <PracticeAreas landing />
+  <AboutPreview />
+  <FirstSteps />
+  <ContactCallout />
+</BaseLayout>

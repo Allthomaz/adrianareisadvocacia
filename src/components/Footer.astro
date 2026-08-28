@@ -1,0 +1,48 @@
+---
+import { navigation, site, whatsappUrl } from "../data/site";
+
+const isLandingPage = Astro.url.pathname === "/";
+---
+
+<footer class="site-footer">
+  <div class="site-footer__grid container">
+    <div class="site-footer__brand">
+      <img
+        src="/images/brand/adriana-reis-logo-ivory.png"
+        alt="Adriana Reis Advocacia"
+        width="940"
+        height="460"
+        loading="lazy"
+      />
+      <p>Advocacia conduzida com estratégia, ética e clareza.</p>
+    </div>
+
+    <nav aria-label="Navegação do rodapé">
+      <p class="site-footer__heading">
+        {isLandingPage ? "Informações" : "Navegação"}
+      </p>
+      <ul>
+        {
+          !isLandingPage &&
+            navigation.slice(1).map((item) => (
+              <li>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))
+        }
+        <li><a href="/politica-de-privacidade/">Política de privacidade</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <p class="site-footer__heading">Contato</p>
+      <a href={whatsappUrl} target="_blank" rel="noreferrer">
+        WhatsApp {site.contact.whatsapp}
+      </a>
+    </div>
+  </div>
+  <div class="site-footer__legal container">
+    <p>© {new Date().getFullYear()} Adriana Reis Advocacia.</p>
+    <p>Conteúdo informativo. Cada situação requer análise individual.</p>
+  </div>
+</footer>

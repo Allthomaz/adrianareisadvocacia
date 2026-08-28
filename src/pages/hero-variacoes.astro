@@ -1,0 +1,478 @@
+---
+import { Picture } from "astro:assets";
+import heroImage from "../assets/images/adriana-hero-navy-cutout.png";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { whatsappUrl } from "../data/site";
+
+const concepts = [
+  { id: "split", label: "01 — Split editorial" },
+  { id: "folio", label: "02 — Capa de revista" },
+  { id: "wine", label: "03 — Vinho imersivo" },
+  { id: "portrait", label: "04 — Retrato invertido" },
+] as const;
+
+const title = "Atuação jurídica: Direito Civil, Trabalhista e Previdenciário.";
+const support =
+  "Orientação para situações envolvendo contratos e cobranças, relações de trabalho, benefícios do INSS e aposentadoria, sempre a partir da análise individual do contexto e dos documentos.";
+---
+
+<BaseLayout
+  title="Variações da hero | Adriana Reis Advocacia"
+  description="Laboratório visual interno para comparação de composições da hero."
+  noindex
+  chrome={false}
+>
+  <div class="concept-index" aria-label="Navegação entre variações">
+    <strong>Hero lab</strong>
+    <nav>
+      {
+        concepts.map((concept, index) => (
+          <a href={`#${concept.id}`}>{String(index + 1).padStart(2, "0")}</a>
+        ))
+      }
+    </nav>
+  </div>
+
+  {
+    concepts.map((concept, index) => (
+      <section
+        class={`concept concept--${concept.id}`}
+        id={concept.id}
+        aria-labelledby={`${concept.id}-title`}
+      >
+        <p class="concept__label">{concept.label}</p>
+        <div class="concept__monogram" aria-hidden="true">
+          AR
+        </div>
+        <div class="concept__content">
+          <p class="concept__eyebrow">
+            <span aria-hidden="true" /> Adriana Reis Advocacia
+          </p>
+          <h1 id={`${concept.id}-title`}>{title}</h1>
+          <p class="concept__support">{support}</p>
+          <a
+            class="concept__cta"
+            href={whatsappUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Falar com Adriana no WhatsApp <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+        <div class="concept__portrait">
+          <Picture
+            src={heroImage}
+            formats={["avif", "webp"]}
+            widths={[640, 960, 1280]}
+            sizes="(max-width: 767px) 100vw, 54vw"
+            alt="Adriana Reis"
+            loading={index === 0 ? "eager" : "lazy"}
+            class="concept__image"
+          />
+        </div>
+      </section>
+    ))
+  }
+</BaseLayout>
+
+<style>
+  .concept-index {
+    position: fixed;
+    z-index: 100;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid rgb(40 36 34 / 18%);
+    background: rgb(247 242 233 / 88%);
+    color: var(--color-graphite-900);
+    backdrop-filter: blur(12px);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .concept-index nav {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .concept-index a {
+    display: grid;
+    width: 2rem;
+    min-height: 2rem;
+    place-items: center;
+    border: 1px solid rgb(40 36 34 / 18%);
+  }
+
+  .concept {
+    position: relative;
+    display: grid;
+    min-height: 100svh;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .concept__label {
+    position: absolute;
+    z-index: 5;
+    top: 1.35rem;
+    left: var(--gutter);
+    margin: 0;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .concept__content {
+    z-index: 2;
+    align-self: center;
+  }
+
+  .concept__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 1.35rem;
+    color: var(--color-wine-700);
+    font-size: 0.69rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .concept__eyebrow span {
+    width: 2.25rem;
+    height: 1px;
+    background: var(--color-gold-500);
+  }
+
+  .concept h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 440;
+    font-optical-sizing: auto;
+    letter-spacing: -0.018em;
+    line-height: 1.01;
+    text-wrap: balance;
+  }
+
+  .concept__support {
+    max-width: 35rem;
+    margin: 1.5rem 0 0;
+    color: rgb(40 36 34 / 74%);
+    line-height: 1.75;
+  }
+
+  .concept__cta {
+    display: inline-flex;
+    min-height: 3.35rem;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.8rem;
+    padding: 0.85rem 1.4rem;
+    background: var(--color-wine-700);
+    color: var(--color-ivory-50);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .concept__portrait {
+    z-index: 1;
+    align-self: end;
+  }
+
+  .concept__portrait picture,
+  .concept__image {
+    width: 100%;
+  }
+
+  .concept__image {
+    object-fit: contain;
+    object-position: center bottom;
+  }
+
+  .concept__monogram {
+    position: absolute;
+    z-index: -1;
+    font-family: var(--font-display);
+    letter-spacing: -0.12em;
+    line-height: 0.8;
+    white-space: nowrap;
+  }
+
+  .concept--split {
+    grid-template-columns: minmax(0, 57%) minmax(0, 43%);
+    background: linear-gradient(
+      to right,
+      var(--color-ivory-50) 0 57%,
+      var(--color-wine-700) 57%
+    );
+  }
+
+  .concept--split .concept__content {
+    max-width: 48rem;
+    padding: 6rem 4rem 4rem max(var(--gutter), calc((100vw - 88rem) / 2));
+  }
+
+  .concept--split h1 {
+    font-size: clamp(4rem, 5.5vw, 5.8rem);
+  }
+
+  .concept--split .concept__portrait {
+    display: flex;
+    height: 100svh;
+    align-items: end;
+  }
+
+  .concept--split .concept__image {
+    max-height: 92svh;
+  }
+
+  .concept--split .concept__monogram {
+    top: 17%;
+    right: 2%;
+    color: rgb(244 235 221 / 10%);
+    font-size: min(30vw, 31rem);
+  }
+
+  .concept--folio {
+    grid-template-columns: minmax(0, 60%) minmax(0, 40%);
+    background: var(--color-ivory-50);
+  }
+
+  .concept--folio::after {
+    position: absolute;
+    z-index: -2;
+    inset: 2rem 2rem 2rem 48%;
+    border: 1px solid rgb(118 38 56 / 32%);
+    content: "";
+  }
+
+  .concept--folio .concept__content {
+    padding: 7rem 0 5rem max(var(--gutter), calc((100vw - 88rem) / 2));
+  }
+
+  .concept--folio h1 {
+    position: relative;
+    z-index: 3;
+    width: min(15ch, 72vw);
+    font-size: clamp(4.3rem, 6.2vw, 6.7rem);
+  }
+
+  .concept--folio .concept__support {
+    max-width: 30rem;
+  }
+
+  .concept--folio .concept__portrait {
+    display: flex;
+    height: calc(100svh - 2rem);
+    align-items: end;
+    margin: 2rem 2rem 0 -4rem;
+    background: var(--color-wine-700);
+  }
+
+  .concept--folio .concept__image {
+    max-height: 87svh;
+  }
+
+  .concept--folio .concept__monogram {
+    right: 2%;
+    bottom: 8%;
+    color: rgb(118 38 56 / 6%);
+    font-size: min(34vw, 34rem);
+  }
+
+  .concept--wine {
+    grid-template-columns: minmax(0, 55%) minmax(0, 45%);
+    background: var(--color-wine-700);
+    color: var(--color-ivory-100);
+  }
+
+  .concept--wine::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0 46% 0 0;
+    background: linear-gradient(135deg, #682033, var(--color-wine-700));
+    content: "";
+  }
+
+  .concept--wine .concept__content {
+    padding: 6rem 3rem 5rem max(var(--gutter), calc((100vw - 88rem) / 2));
+  }
+
+  .concept--wine .concept__eyebrow,
+  .concept--wine .concept__label {
+    color: var(--color-ivory-100);
+  }
+
+  .concept--wine h1 {
+    max-width: 12.5ch;
+    font-size: clamp(4.2rem, 5.8vw, 6.1rem);
+  }
+
+  .concept--wine .concept__support {
+    color: rgb(244 235 221 / 76%);
+  }
+
+  .concept--wine .concept__cta {
+    background: var(--color-ivory-100);
+    color: var(--color-wine-800);
+  }
+
+  .concept--wine .concept__portrait {
+    display: flex;
+    height: 100svh;
+    align-items: end;
+  }
+
+  .concept--wine .concept__image {
+    max-height: 94svh;
+  }
+
+  .concept--wine .concept__monogram {
+    top: 12%;
+    right: -2%;
+    color: rgb(244 235 221 / 9%);
+    font-size: min(35vw, 36rem);
+  }
+
+  .concept--portrait {
+    grid-template-columns: minmax(0, 45%) minmax(0, 55%);
+    background: var(--color-ivory-100);
+  }
+
+  .concept--portrait .concept__portrait {
+    display: flex;
+    height: 100svh;
+    grid-column: 1;
+    grid-row: 1;
+    align-items: end;
+    background: var(--color-wine-700);
+  }
+
+  .concept--portrait .concept__image {
+    max-height: 94svh;
+  }
+
+  .concept--portrait .concept__content {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 6rem max(var(--gutter), calc((100vw - 88rem) / 2)) 5rem
+      clamp(3rem, 7vw, 8rem);
+  }
+
+  .concept--portrait h1 {
+    max-width: 12ch;
+    font-size: clamp(4.2rem, 5.7vw, 6rem);
+  }
+
+  .concept--portrait .concept__monogram {
+    top: 15%;
+    left: 1%;
+    color: rgb(244 235 221 / 10%);
+    font-size: min(32vw, 32rem);
+  }
+
+  @media (max-width: 47.99rem) {
+    .concept-index {
+      top: 0.75rem;
+      right: 0.75rem;
+      bottom: auto;
+    }
+
+    .concept {
+      grid-template-columns: 1fr;
+      min-height: auto;
+      padding-top: 4.75rem;
+    }
+
+    .concept__label {
+      top: 1.5rem;
+      left: var(--gutter);
+    }
+
+    .concept__content,
+    .concept--split .concept__content,
+    .concept--folio .concept__content,
+    .concept--wine .concept__content,
+    .concept--portrait .concept__content {
+      width: auto;
+      grid-column: 1;
+      grid-row: 1;
+      padding: 2.5rem var(--gutter) 2.25rem;
+    }
+
+    .concept h1,
+    .concept--split h1,
+    .concept--folio h1,
+    .concept--wine h1,
+    .concept--portrait h1 {
+      width: auto;
+      max-width: 15ch;
+      font-size: clamp(2.75rem, 12vw, 4.25rem);
+      line-height: 1.02;
+    }
+
+    .concept__support {
+      font-size: 0.94rem;
+      line-height: 1.65;
+    }
+
+    .concept__portrait,
+    .concept--split .concept__portrait,
+    .concept--folio .concept__portrait,
+    .concept--wine .concept__portrait,
+    .concept--portrait .concept__portrait {
+      display: flex;
+      height: 29rem;
+      grid-column: 1;
+      grid-row: 2;
+      align-items: end;
+      margin: 0;
+      background: var(--color-wine-700);
+    }
+
+    .concept__image {
+      max-height: 30rem !important;
+    }
+
+    .concept--folio::after {
+      display: none;
+    }
+
+    .concept--split,
+    .concept--folio {
+      background: var(--color-ivory-50);
+    }
+
+    .concept--wine .concept__content {
+      color: var(--color-ivory-100);
+    }
+
+    .concept--wine .concept__portrait {
+      background: transparent;
+    }
+
+    .concept--portrait .concept__portrait {
+      grid-row: 1;
+      height: 31rem;
+    }
+
+    .concept--portrait .concept__content {
+      grid-row: 2;
+      background: var(--color-ivory-100);
+    }
+
+    .concept--portrait {
+      padding-top: 0;
+    }
+
+    .concept--portrait .concept__label {
+      color: var(--color-ivory-100);
+    }
+  }
+</style>

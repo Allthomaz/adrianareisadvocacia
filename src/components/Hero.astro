@@ -1,0 +1,115 @@
+---
+import { Picture } from "astro:assets";
+import heroImage from "../assets/images/adriana-hero-navy-cutout.png";
+import { whatsappUrl } from "../data/site";
+---
+
+<section class="hero" data-hero>
+  <div class="hero__wine" aria-hidden="true"></div>
+  <div class="hero__grid container">
+    <div class="hero__content">
+      <p class="eyebrow hero__eyebrow" data-hero-item>
+        <span aria-hidden="true"></span>
+        Adriana Reis Advocacia
+      </p>
+      <h1 data-hero-item>
+        Atuação jurídica:  Direito Civil, Trabalhista e Previdenciário.
+      </h1>
+      <p class="hero__support" data-hero-item>
+        Orientação para situações envolvendo contratos e cobranças, relações de
+        trabalho, benefícios do INSS e aposentadoria, sempre a partir da análise
+        individual do contexto e dos documentos.
+      </p>
+      <div class="hero__actions" data-hero-item>
+        <a
+          class="button button--primary"
+          href={whatsappUrl}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Falar com Adriana no WhatsApp <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero__portrait" data-hero-portrait>
+      <span class="hero__monogram" aria-hidden="true">AR</span>
+      <Picture
+        src={heroImage}
+        formats={["avif", "webp"]}
+        widths={[640, 960, 1280, 1664]}
+        sizes="(max-width: 767px) 94vw, (max-width: 1199px) 54vw, 760px"
+        alt="Adriana Reis"
+        loading="eager"
+        fetchpriority="high"
+        class="hero__image"
+      />
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+
+  const hero = document.querySelector<HTMLElement>("[data-hero]");
+
+  if (hero) {
+    const media = gsap.matchMedia();
+
+    media.add(
+      {
+        reduceMotion: "(prefers-reduced-motion: reduce)",
+        desktop: "(min-width: 768px)",
+      },
+      (context) => {
+        const { reduceMotion, desktop } = context.conditions as {
+          reduceMotion: boolean;
+          desktop: boolean;
+        };
+        const items = hero.querySelectorAll("[data-hero-item]");
+        const portrait = hero.querySelector("[data-hero-portrait]");
+
+        if (reduceMotion) {
+          gsap.set([items, portrait], { clearProps: "all" });
+          return;
+        }
+
+        const timeline = gsap.timeline({
+          defaults: { duration: desktop ? 0.72 : 0.5, ease: "power2.out" },
+          onComplete: () =>
+            gsap.set([items, portrait], { clearProps: "willChange" }),
+        });
+
+        timeline
+          .addLabel("intro")
+          .fromTo(
+            items,
+            {
+              autoAlpha: 0,
+              y: desktop ? 24 : 14,
+              willChange: "transform,opacity",
+            },
+            { autoAlpha: 1, y: 0, stagger: 0.09 },
+            "intro",
+          )
+          .fromTo(
+            portrait,
+            {
+              autoAlpha: 0,
+              y: desktop ? 28 : 16,
+              scale: 0.985,
+              willChange: "transform,opacity",
+            },
+            { autoAlpha: 1, y: 0, scale: 1 },
+            "intro+=0.18",
+          );
+
+        return () => timeline.kill();
+      },
+    );
+
+    document.addEventListener("astro:before-swap", () => media.revert(), {
+      once: true,
+    });
+  }
+</script>

@@ -1,0 +1,34 @@
+{
+  "name": "adriana-reis-advocacia",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "preview:worker": "astro build && wrangler dev",
+    "deploy": "astro build && wrangler deploy",
+    "check": "astro check",
+    "format": "prettier --write src public astro.config.mjs tsconfig.json wrangler.jsonc package.json",
+    "format:check": "prettier --check src public astro.config.mjs tsconfig.json wrangler.jsonc package.json"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "@fontsource-variable/bodoni-moda": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0",
+    "@lucide/astro": "^1.34.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.2.9",
+    "gsap": "^3.15.0",
+    "sharp": "^0.35.4",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "wrangler": "^4.127.0"
+  }
+}

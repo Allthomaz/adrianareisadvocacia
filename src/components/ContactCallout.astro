@@ -1,0 +1,26 @@
+---
+import { whatsappUrl } from "../data/site";
+---
+
+<section class="contact-callout" aria-labelledby="contact-callout-title">
+  <div class="contact-callout__inner container">
+    <p class="eyebrow eyebrow--light">
+      <span aria-hidden="true"></span> Contato
+    </p>
+    <div>
+      <h2 id="contact-callout-title">Apresente o contexto da sua situação.</h2>
+      <p>
+        Inicie uma conversa pelo canal principal do escritório. A mensagem será
+        aberta no WhatsApp para você descrever brevemente o que precisa.
+      </p>
+      <a
+        class="button button--light"
+        href={whatsappUrl}
+        target="_blank"
+        rel="noreferrer"
+      >
+        Falar com Adriana no WhatsApp <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </div>
+</section>

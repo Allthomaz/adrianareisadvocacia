@@ -1,0 +1,134 @@
+---
+import MobileMenu from "./MobileMenu.astro";
+import { landingNavigation, navigation, whatsappUrl } from "../data/site";
+
+const currentPath = Astro.url.pathname;
+const isLandingPage = currentPath === "/";
+const headerNavigation = isLandingPage ? landingNavigation : navigation;
+const isCurrent = (href: string) =>
+  href === "/" ? currentPath === "/" : currentPath.startsWith(href);
+---
+
+<header class="site-header" data-site-header>
+  <div class="site-header__inner container">
+    <a
+      class="site-header__brand"
+      href="/"
+      aria-label="Adriana Reis — página inicial"
+    >
+      <img
+        src="/images/brand/adriana-reis-logo-wine.png"
+        alt="Adriana Reis Advocacia"
+        width="940"
+        height="460"
+      />
+    </a>
+
+    <nav class="desktop-navigation" aria-label="Navegação principal">
+      <ul>
+        {
+          headerNavigation.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={
+                  !isLandingPage && isCurrent(item.href) ? "page" : undefined
+                }
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a
+      class="site-header__cta"
+      href={whatsappUrl}
+      target="_blank"
+      rel="noreferrer"
+    >
+      Falar no WhatsApp
+    </a>
+    <MobileMenu
+      currentPath={currentPath}
+      items={headerNavigation}
+      isLandingPage={isLandingPage}
+    />
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>("[data-site-header]");
+  const toggle =
+    document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+  const panel = document.querySelector<HTMLElement>("[data-mobile-panel]");
+  const backdrop = document.querySelector<HTMLElement>("[data-menu-backdrop]");
+  let lastFocused: HTMLElement | null = null;
+  let closeTimer: number | undefined;
+
+  const updateHeader = () =>
+    header?.classList.toggle("is-scrolled", window.scrollY > 24);
+  updateHeader();
+  window.addEventListener("scroll", updateHeader, { passive: true });
+
+  const closeMenu = (restoreFocus = true) => {
+    if (!toggle || !panel || !backdrop) return;
+    window.clearTimeout(closeTimer);
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-label", "Abrir menu");
+    panel.classList.remove("is-open");
+    backdrop.classList.remove("is-open");
+    document.body.classList.remove("menu-is-open");
+    closeTimer = window.setTimeout(() => {
+      if (toggle.getAttribute("aria-expanded") === "false") {
+        panel.hidden = true;
+        backdrop.hidden = true;
+      }
+    }, 320);
+    if (restoreFocus) lastFocused?.focus();
+  };
+
+  const openMenu = () => {
+    if (!toggle || !panel || !backdrop) return;
+    window.clearTimeout(closeTimer);
+    lastFocused = document.activeElement as HTMLElement;
+    toggle.setAttribute("aria-expanded", "true");
+    toggle.setAttribute("aria-label", "Fechar menu");
+    panel.hidden = false;
+    backdrop.hidden = false;
+    document.body.classList.add("menu-is-open");
+    requestAnimationFrame(() => {
+      panel.classList.add("is-open");
+      backdrop.classList.add("is-open");
+    });
+  };
+
+  toggle?.addEventListener("click", () => {
+    toggle.getAttribute("aria-expanded") === "true" ? closeMenu() : openMenu();
+  });
+  panel?.addEventListener("click", (event) => {
+    if ((event.target as Element).closest("a")) closeMenu(false);
+  });
+  backdrop?.addEventListener("click", () => closeMenu(false));
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (toggle?.getAttribute("aria-expanded") === "true") closeMenu(false);
+    },
+    { passive: true },
+  );
+  document.addEventListener("keydown", (event) => {
+    if (
+      event.key === "Escape" &&
+      toggle?.getAttribute("aria-expanded") === "true"
+    )
+      closeMenu();
+  });
+  window
+    .matchMedia("(min-width: 1024px)")
+    .addEventListener("change", (event) => {
+      if (event.matches) closeMenu();
+    });
+</script>
