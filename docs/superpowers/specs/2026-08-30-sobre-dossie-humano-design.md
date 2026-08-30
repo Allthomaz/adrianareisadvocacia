@@ -11,7 +11,7 @@ fornecidas por Adriana Rodrigues Reis de Andrade
 
 Transformar a página Sobre, hoje estrutural, em um perfil institucional autoral
 que apresente Adriana por meio de sua forma concreta de trabalhar: compreender
-o caso por inteiro, examinar fatos e documentos com critério e somente então
+o caso por completo, examinar fatos e documentos com critério e somente então
 delimitar uma estratégia jurídica.
 
 A página deve aumentar confiança sem recorrer a autoengrandecimento, promessa
@@ -140,7 +140,7 @@ fotografia à direita. No mobile, texto antes da imagem.
 
 **H1**
 
-`Compreender o caso por inteiro precede a definição da estratégia jurídica.`
+`Compreender o caso por completo precede a definição da estratégia jurídica.`
 
 **Apoio**
 
@@ -159,10 +159,7 @@ imediatamente o que essa precedência significa.
 
 **Texto-base**
 
-`Uma inclinação natural para compreender o que existe por trás de cada situação
-conduziu Adriana ao Direito. Na advocacia, encontrou um ofício em que
-conhecimento, estratégia e responsabilidade podem ser colocados a serviço de
-pessoas que, diante de uma controvérsia, nem sempre sabem por onde começar.`
+`Uma inclinação natural para compreender o que existe por trás de cada situação e como resolvê-la conduziu Adriana ao Direito. Na advocacia, encontrou um ofício em que conhecimento, estratégia e responsabilidade podem ser colocados a serviço de pessoas que, diante de um problema jurídico, nem sempre sabem quais caminhos têm à disposição.`
 
 O trecho comunica motivação sem construir uma narrativa biográfica não
 fornecida.
@@ -378,4 +375,3 @@ island.
   depoimentos ou alegações não fornecidas.
 - O CTA utiliza a URL centralizada do WhatsApp.
 - A copy mantém registro culto sem comprometer a compreensão.
-
