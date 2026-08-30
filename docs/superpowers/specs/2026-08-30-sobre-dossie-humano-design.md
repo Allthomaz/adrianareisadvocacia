@@ -1,15 +1,17 @@
 # Página Sobre — Dossiê Humano
 
-**Status:** direção aprovada em 30 de agosto de 2026  
-**Escopo:** página `/sobre/`, resumo institucional da homepage e identificação
-profissional compartilhada  
+**Status:** direção aprovada em 30 de agosto de 2026; emendada em 30 de agosto
+de 2026 após decisão de landing page única de conversão  
+**Escopo:** seção `#sobre` da homepage (rota `/sobre/` extinta com redirect),
+identificação profissional compartilhada  
 **Referências:** `START-HERE.md`, `docs/spec-site.md`,
-`docs/astro-cloudflare-boas-praticas.md`, `docs/brand-assets.md` e respostas
+`docs/astro-cloudflare-boas-praticas.md`, `docs/brand-assets.md`,
+`docs/superpowers/specs/2026-08-30-lp-conversao-total-design.md` e respostas
 fornecidas por Adriana Rodrigues Reis de Andrade
 
 ## 1. Objetivo
 
-Transformar a página Sobre, hoje estrutural, em um perfil institucional autoral
+Transformar a seção Sobre, hoje estrutural, em um perfil institucional autoral
 que apresente Adriana por meio de sua forma concreta de trabalhar: compreender
 o caso por completo, examinar fatos e documentos com critério e somente então
 delimitar uma estratégia jurídica.
@@ -123,7 +125,7 @@ Regras:
 Na abertura, a fotografia será candidata a LCP: carregamento imediato,
 prioridade alta, dimensões declaradas e espaço reservado para evitar CLS.
 
-## 6. Arquitetura da página
+## 6. Arquitetura da seção
 
 ### 6.1 Abertura — compreender antes de definir
 
@@ -138,9 +140,12 @@ fotografia à direita. No mobile, texto antes da imagem.
 
 `Adriana Rodrigues Reis de Andrade · OAB/SP nº 533.644`
 
-**H1**
+**Título de seção (h2)**
 
 `Compreender o caso por completo precede a definição da estratégia jurídica.`
+
+Na página única, o `h1` pertence ao hero da homepage; o título da seção Sobre é
+um `h2` para preservar a hierarquia.
 
 **Apoio**
 
@@ -247,27 +252,16 @@ informações e documentos serão necessários para a análise inicial.`
 O CTA leva ao WhatsApp centralizado em `src/data/site.ts` e abre em nova aba com
 o comportamento já adotado no site.
 
-## 7. Resumo institucional da homepage
+## 7. Integração na homepage
 
-O bloco atual será mantido em sua estrutura, mas receberá copy coerente com a
-página completa.
+O resumo institucional (`AboutPreview`) é removido: o perfil completo
+**substitui** o resumo dentro da própria homepage, sob a âncora `#sobre` já
+existente na navegação. Não há CTA `Conheça Adriana` nem rota `/sobre/` — o
+encerramento da própria seção aponta para o WhatsApp, mantendo o funil único
+definido na spec da LP de conversão total.
 
-**Título**
-
-`Antes da estratégia, vem a compreensão do caso.`
-
-**Texto**
-
-`Adriana Reis conduz cada atendimento a partir da escuta, do exame dos
-documentos e das circunstâncias próprias da situação. Somente depois dessa
-compreensão são delimitados os possíveis caminhos jurídicos.`
-
-**CTA**
-
-`Conheça Adriana`
-
-O CTA deve levar a `/sobre/`. O WhatsApp permanece no CTA final da homepage,
-evitando que todos os blocos disputem a mesma conversão.
+A rota `/sobre/` deixa de existir no build e recebe redirect 301 para
+`/#sobre`.
 
 ## 8. Dados compartilhados
 
@@ -331,8 +325,8 @@ imediatamente o estado final.
 ## 11. Responsividade e acessibilidade
 
 - Mobile-first, com composição própria em 390 px.
-- Um único `h1` na página.
-- Ordem mobile: identificação, H1, apoio, fotografia, narrativa, método,
+- `h1` único na homepage pertence ao hero; a seção Sobre abre com `h2`.
+- Ordem mobile: identificação, título, apoio, fotografia, narrativa, método,
   citação, formação, atendimento e CTA.
 - Fotografia sem texto sobre o rosto ou sobre áreas de contraste instável.
 - Alvos interativos com pelo menos 44 × 44 px.
@@ -343,8 +337,8 @@ imediatamente o estado final.
 
 ## 12. Arquitetura de implementação
 
-A página `/sobre/` deixa de usar `PageIntro` e passa a compor componentes Astro
-específicos e estáticos. Os limites previstos são:
+A seção `#sobre` é composta por `AboutProfile.astro` renderizado dentro de
+`src/pages/index.astro`, no lugar do `AboutPreview`. Os limites previstos são:
 
 - abertura e fotografia;
 - narrativa e método;
@@ -357,12 +351,13 @@ somente blocos com responsabilidade visual ou script próprio; não criar uma
 abstração para cada seção.
 
 Os estilos permanecem em `src/styles/global.css`, seguindo a organização atual.
-O script GSAP fica no componente da abertura ou da página Sobre, sem criar
-island.
+O script GSAP fica no próprio `AboutProfile.astro`, sem criar island. O
+`AboutPreview.astro` e a rota `src/pages/sobre.astro` são removidos.
 
 ## 13. Verificação e aceite
 
 - `pnpm check` e `pnpm build` passam sem erros.
+- `/sobre/` responde com redirect 301 para `/#sobre`.
 - Página validada visualmente em 390 px e 1440 px.
 - Sem overflow horizontal.
 - Sem console errors.
