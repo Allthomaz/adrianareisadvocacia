@@ -4,7 +4,7 @@ import { promisify } from "node:util";
 import test, { after, before } from "node:test";
 
 const execFileAsync = promisify(execFile);
-const previewUrl = "http://127.0.0.1:4333/sobre/";
+const previewUrl = "http://127.0.0.1:4333/";
 let preview;
 
 before(async () => {
@@ -27,7 +27,11 @@ before(async () => {
 });
 
 after(() => {
-  if (preview?.pid) process.kill(-preview.pid, "SIGTERM");
+  if (preview?.pid) {
+    try {
+      process.kill(-preview.pid, "SIGTERM");
+    } catch {}
+  }
 });
 
 const dumpDom = async (extraFlags = []) => {

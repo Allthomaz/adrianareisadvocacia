@@ -193,3 +193,130 @@ const serviceModes = site.professional.serviceModes
     </div>
   </section>
 </article>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const profile = document.querySelector<HTMLElement>("[data-about-profile]");
+
+  if (profile) {
+    const media = gsap.matchMedia();
+
+    media.add(
+      {
+        reduceMotion: "(prefers-reduced-motion: reduce)",
+        desktop: "(min-width: 48rem)",
+        mobile: "(max-width: 47.999rem)",
+      },
+      (context) => {
+        const { reduceMotion, desktop } = context.conditions as {
+          reduceMotion: boolean;
+          desktop: boolean;
+        };
+        const hero = profile.querySelector<HTMLElement>("[data-about-hero]");
+        const introItems =
+          profile.querySelectorAll<HTMLElement>("[data-about-intro]");
+        const photoFrame = profile.querySelector<HTMLElement>(
+          "[data-about-photo-frame]",
+        );
+        const photo = profile.querySelector<HTMLElement>("[data-about-photo]");
+        const monogram = profile.querySelector<HTMLElement>(
+          "[data-about-monogram]",
+        );
+        const revealItems = profile.querySelectorAll<HTMLElement>(
+          "[data-about-reveal]",
+        );
+
+        if (reduceMotion || !hero || !photoFrame || !photo) {
+          profile.dataset.motionState = "reduced";
+          [...introItems, photoFrame, photo, monogram, ...revealItems]
+            .filter((el): el is HTMLElement => el !== null)
+            .forEach((el) => el.removeAttribute("style"));
+          return;
+        }
+
+        profile.dataset.motionState = "active";
+
+        const intro = gsap.timeline({
+          defaults: { duration: desktop ? 0.72 : 0.5, ease: "power2.out" },
+          onComplete: () =>
+            gsap.set([introItems, photoFrame], { clearProps: "willChange" }),
+        });
+
+        intro
+          .fromTo(
+            introItems,
+            {
+              autoAlpha: 0,
+              y: desktop ? 22 : 14,
+              willChange: "transform,opacity",
+            },
+            { autoAlpha: 1, y: 0, stagger: 0.08 },
+            0,
+          )
+          .fromTo(
+            photoFrame,
+            {
+              autoAlpha: 0,
+              y: desktop ? 26 : 16,
+              willChange: "transform,opacity",
+            },
+            { autoAlpha: 1, y: 0 },
+            0.18,
+          );
+
+        const photoTravel = desktop ? 24 : 8;
+        const parallax = gsap.timeline({
+          scrollTrigger: {
+            trigger: hero,
+            start: "top top",
+            end: "bottom top",
+            scrub: desktop ? 0.8 : 0.5,
+          },
+        });
+
+        parallax.fromTo(
+          photo,
+          { y: photoTravel * -0.5 },
+          { y: photoTravel * 0.5, ease: "none" },
+          0,
+        );
+
+        if (desktop && monogram) {
+          parallax.fromTo(monogram, { y: -6 }, { y: 6, ease: "none" }, 0);
+        }
+
+        revealItems.forEach((item) => {
+          gsap.fromTo(
+            item,
+            { autoAlpha: 0, y: 24, willChange: "transform,opacity" },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.68,
+              ease: "power2.out",
+              clearProps: "willChange",
+              scrollTrigger: {
+                trigger: item,
+                start: "clamp(top 84%)",
+                once: true,
+              },
+            },
+          );
+        });
+
+        return () => {
+          intro.kill();
+          parallax.kill();
+        };
+      },
+    );
+
+    document.addEventListener("astro:before-swap", () => media.revert(), {
+      once: true,
+    });
+  }
+</script>

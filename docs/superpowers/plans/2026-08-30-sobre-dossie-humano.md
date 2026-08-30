@@ -456,6 +456,13 @@ git commit -m "feat: criar conteúdo institucional da página Sobre"
 - Modify: `src/components/AboutProfile.astro`
 - Modify: `src/styles/global.css`
 
+> **Emenda (2026-08-30):** o AboutProfile não tem mais rota própria — ele é
+> renderizado como seção `#sobre` da homepage em `src/pages/index.astro`
+> (substitui a referência original a `src/pages/sobre.astro`). O título do
+> hero do Sobre é `<h2 id="about-title">`; os seletores CSS do plano para
+> `.about-profile h1` devem ser aplicados ao `#about-title`, preservando o
+> h1 único do hero da homepage.
+
 **Interfaces:**
 - Consumes: hooks `data-about-profile`, `data-about-hero`, `data-about-photo`, `data-about-monogram`, `data-about-intro` e `data-about-reveal` da Task 2.
 - Produces: experiência progressivamente aprimorada com `gsap.matchMedia()` e CSS mobile-first; `data-motion-state` expõe o estado efetivo para diagnóstico sem controlar a apresentação.
@@ -471,7 +478,7 @@ import { promisify } from "node:util";
 import test, { after, before } from "node:test";
 
 const execFileAsync = promisify(execFile);
-const previewUrl = "http://127.0.0.1:4333/sobre/";
+const previewUrl = "http://127.0.0.1:4333/";
 let preview;
 
 before(async () => {
