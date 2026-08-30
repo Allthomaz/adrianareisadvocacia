@@ -416,10 +416,6 @@ a {
   font-size: clamp(1.55rem, 7vw, 2.25rem);
 }
 
-.mobile-panel li a[aria-current="page"] {
-  color: var(--color-wine-700);
-}
-
 .mobile-panel__cta {
   width: 100%;
 }
@@ -885,62 +881,12 @@ a {
   color: rgb(244 235 221 / 70%);
 }
 
-.about-preview {
-  padding-block: clamp(5rem, 10vw, 9rem);
-  background: var(--color-ivory-100);
-}
-
 #atuacao,
 #sobre,
 #como-comecar {
   scroll-margin-top: calc(var(--header-height) + 1rem);
 }
 
-.about-preview__grid {
-  display: grid;
-  gap: clamp(3rem, 8vw, 7rem);
-}
-
-.about-preview__portrait {
-  position: relative;
-  min-height: 25rem;
-  overflow: hidden;
-  background: var(--color-wine-700);
-  isolation: isolate;
-}
-
-.about-preview__portrait > span {
-  position: absolute;
-  z-index: -1;
-  top: 10%;
-  left: 50%;
-  color: rgb(244 235 221 / 10%);
-  font-family: var(--font-display);
-  font-size: clamp(13rem, 62vw, 22rem);
-  letter-spacing: -0.12em;
-  line-height: 0.8;
-  transform: translateX(-54%);
-  white-space: nowrap;
-}
-
-.about-preview__portrait picture,
-.about-preview__image {
-  width: 100%;
-  height: 100%;
-}
-
-.about-preview__image {
-  position: absolute;
-  inset: 0;
-  object-fit: contain;
-  object-position: center bottom;
-}
-
-.about-preview__content {
-  align-self: center;
-}
-
-.about-preview h2,
 .first-steps h2,
 .contact-callout h2 {
   margin: 1.4rem 0 1.35rem;
@@ -949,12 +895,6 @@ a {
   font-weight: 470;
   letter-spacing: -0.04em;
   line-height: 0.97;
-}
-
-.about-preview__content > p:not(.eyebrow) {
-  max-width: 34rem;
-  margin: 0 0 1.7rem;
-  color: rgb(40 36 34 / 70%);
 }
 
 .first-steps {
@@ -1286,19 +1226,6 @@ a {
     padding-block: 2.6rem;
   }
 
-  .about-preview__grid {
-    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-    align-items: center;
-  }
-
-  .about-preview__portrait {
-    min-height: 36rem;
-  }
-
-  .about-preview__portrait > span {
-    font-size: clamp(18rem, 29vw, 27rem);
-  }
-
   .first-steps__header,
   .contact-callout__inner {
     grid-template-columns: 0.7fr 1.3fr;
@@ -1391,8 +1318,7 @@ a {
     transition: transform var(--transition);
   }
 
-  .desktop-navigation a:hover::after,
-  .desktop-navigation a[aria-current="page"]::after {
+  .desktop-navigation a:hover::after {
     transform: scaleX(1);
   }
 

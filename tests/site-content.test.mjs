@@ -1,9 +1,17 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
 const readBuiltPage = (pathname) =>
   readFile(new URL(`../dist/${pathname}`, import.meta.url), "utf8");
+
+const pathExists = (pathname) =>
+  access(new URL(`../dist/${pathname}`, import.meta.url))
+    .then(() => true)
+    .catch(() => false);
+
+const escapeRegExp = (value) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 test("publica identificação profissional e localidade confirmadas no rodapé", async () => {
   const html = await readBuiltPage("index.html");
@@ -90,4 +98,42 @@ test("a seção Sobre não publica alegações vedadas ou fatos recusados", asyn
 
   assert.doesNotMatch(html, /especialista|especializada|garantia de resultado/);
   assert.doesNotMatch(html, /ano de início|tempo de atuação/);
+});
+
+// Nota de adaptação: em output "static" o Astro materializa cada redirect como
+// uma página HTML de meta-refresh no mesmo path da rota antiga (ex.:
+// dist/sobre/index.html). O teste abaixo verifica o conteúdo do redirect, e
+// não a ausência do arquivo.
+test("rotas secundárias viram redirects noindex para âncoras da LP", async () => {
+  assert.ok(await pathExists("index.html"));
+  assert.ok(await pathExists("politica-de-privacidade/index.html"));
+
+  const expectations = [
+    ["sobre/index.html", "/#sobre"],
+    ["atuacao/index.html", "/#atuacao"],
+    ["atuacao/direito-civil/index.html", "/#atuacao"],
+    ["atuacao/direito-trabalhista/index.html", "/#atuacao"],
+    ["atuacao/direito-previdenciario/index.html", "/#atuacao"],
+    ["contato/index.html", "/#como-comecar"],
+    ["conteudos/index.html", "/"],
+  ];
+
+  for (const [pathname, target] of expectations) {
+    const html = await readBuiltPage(pathname);
+    assert.match(
+      html,
+      new RegExp(`http-equiv="refresh" content="0;url=${escapeRegExp(target)}"`),
+      `${pathname} deve redirecionar para ${target}`,
+    );
+    assert.match(html, /name="robots" content="noindex"/, pathname);
+  }
+});
+
+test("nenhum link interno aponta para rota removida", async () => {
+  const html = await readBuiltPage("index.html");
+
+  assert.doesNotMatch(html, /href="\/sobre\/"/);
+  assert.doesNotMatch(html, /href="\/atuacao\//);
+  assert.doesNotMatch(html, /href="\/contato\/"/);
+  assert.doesNotMatch(html, /href="\/conteudos\/"/);
 });
