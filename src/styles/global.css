@@ -113,10 +113,22 @@ a {
 }
 
 .eyebrow > span {
+  position: relative;
   width: 2.25rem;
   height: 1px;
   flex: 0 0 auto;
   background: var(--color-gold-500);
+}
+
+.eyebrow > span::after {
+  position: absolute;
+  top: 50%;
+  right: -0.3rem;
+  width: 5px;
+  height: 5px;
+  background: var(--color-gold-500);
+  content: "";
+  transform: translateY(-50%) rotate(45deg);
 }
 
 .button {
@@ -664,6 +676,10 @@ a {
   gap: 2rem;
 }
 
+.practice-overview__spine {
+  display: none;
+}
+
 .practice-overview h2 {
   max-width: 13ch;
   margin: 0;
@@ -949,15 +965,54 @@ a {
 }
 
 .contact-callout {
-  padding-block: clamp(5rem, 10vw, 8rem);
-  overflow: hidden;
-  background: var(--color-wine-700);
+  position: relative;
+  z-index: 1;
+  margin-top: -5vw;
+  padding-block: clamp(7rem, 12vw, 10rem) clamp(5rem, 10vw, 8rem);
+  clip-path: polygon(0 5vw, 100% 0, 100% 100%, 0 100%);
+  background:
+    radial-gradient(circle, rgb(183 138 85 / 16%) 1px, transparent 1.6px) 0 0 /
+      30px 30px,
+    var(--color-wine-700);
   color: var(--color-ivory-100);
 }
 
 .contact-callout__inner {
+  position: relative;
   display: grid;
   gap: 2rem;
+  padding: clamp(0.75rem, 3vw, 2rem);
+}
+
+.contact-callout__inner::before,
+.contact-callout__inner::after {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  content: "";
+  pointer-events: none;
+}
+
+.contact-callout__inner::before {
+  top: 0;
+  left: 0;
+  border-top: 1px solid var(--color-gold-500);
+  border-left: 1px solid var(--color-gold-500);
+}
+
+.contact-callout__inner::after {
+  right: 0;
+  bottom: 0;
+  border-right: 1px solid var(--color-gold-500);
+  border-bottom: 1px solid var(--color-gold-500);
+}
+
+.callout-line {
+  display: block;
+}
+
+.callout-strong {
+  font-weight: 640;
 }
 
 .eyebrow--light {
@@ -965,8 +1020,11 @@ a {
 }
 
 .contact-callout h2 {
-  max-width: 12ch;
-  margin-top: 0;
+  max-width: none;
+  margin: 0;
+  font-size: clamp(2.4rem, 5vw, 4.6rem);
+  letter-spacing: -0.04em;
+  line-height: 1.04;
 }
 
 .contact-callout div > p {
@@ -1422,9 +1480,120 @@ a {
 }
 
 .about-profile__service {
-  padding-block: clamp(5rem, 10vw, 8rem);
-  background: var(--color-wine-800);
+  margin-top: -4vw;
+  padding-block: clamp(6rem, 11vw, 9rem) clamp(5rem, 10vw, 8rem);
+  clip-path: polygon(0 0, 100% 4vw, 100% 100%, 0 100%);
+  background:
+    radial-gradient(circle, rgb(183 138 85 / 13%) 1px, transparent 1.6px) 0 0 /
+      30px 30px,
+    var(--color-wine-800);
   color: var(--color-ivory-100);
+}
+
+.about-profile__service-spine {
+  display: none;
+}
+
+.about-profile__contact {
+  position: relative;
+  overflow: clip;
+}
+
+.about-profile__contact::before {
+  position: absolute;
+  top: -5rem;
+  right: -1.5rem;
+  color: rgb(183 138 85 / 12%);
+  font-family: var(--font-display);
+  font-size: clamp(16rem, 34vw, 30rem);
+  line-height: 1;
+  content: "§";
+  pointer-events: none;
+}
+
+@media (min-width: 48rem) {
+  .practice-overview__spine,
+  .about-profile__service-spine {
+    display: flex;
+    writing-mode: vertical-rl;
+    rotate: 180deg;
+    letter-spacing: 0.24em;
+  }
+
+  .practice-overview__spine > span,
+  .about-profile__service-spine > span {
+    display: none;
+  }
+
+  .practice-overview__grid {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: end;
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+
+  .practice-overview__grid > div,
+  .about-profile__service-grid > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: end;
+  }
+
+  .practice-overview__grid > div > p,
+  .about-profile__service-grid > div > p {
+    max-width: 34rem;
+    margin: 0;
+  }
+
+  .about-profile__service-grid {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: end;
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+
+  .about-profile__contact {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 5rem);
+  }
+
+  .about-profile__contact-body {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+  }
+
+  .contact-callout__inner {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: end;
+    gap: clamp(2rem, 5vw, 5rem);
+  }
+
+  .contact-callout .eyebrow {
+    grid-column: 1 / -1;
+  }
+
+  .contact-callout__inner > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(22rem, 1fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: end;
+  }
+
+  .contact-callout__inner > div > h2 {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  .contact-callout__inner > div > p,
+  .contact-callout__inner > div > .button {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .contact-callout__inner > div > .button {
+    white-space: nowrap;
+  }
 }
 
 .about-profile__service p:not(.eyebrow) {

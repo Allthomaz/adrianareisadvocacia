@@ -93,6 +93,29 @@ Rotas de laboratório, com `noindex` e sem chrome do site:
   link ou iniciar rolagem.
 - O hambúrguer fica na extrema direita e vira X sobre uma expansão vinho.
 
+## Elementos visuais
+
+Repertório decorativo implementado (2026-08-30), sempre dentro da paleta
+existente e sem novas fontes:
+
+- **Pingente dourado** (global): losango de 5 px na ponta direita do fio de
+  todos os eyebrows (`.eyebrow > span::after`).
+- **Lombadas verticais**: rótulos girados 90° (`writing-mode: vertical-rl`) na
+  margem esquerda — `practice-overview` ("Frentes de atuação") e
+  `about-profile__service` ("Atendimento"); ocultas no mobile.
+- **Cortes diagonais**: `clip-path: polygon()` com tuck (`margin-top`
+  negativo) — `contact-callout` (corte no canto superior esquerdo, 5 vw) e
+  `about-profile__service` (canto superior direito, 4 vw). Estáticos: nunca
+  animar `clip-path` no scroll.
+- **Padrão de pontos dourado**: `radial-gradient` repetido (30 px) sobre fundo
+  vinho — citação do Sobre, `contact-callout` e `about-profile__service`.
+- **Marca d'água §**: símbolo de seção em Bodoni gigante e dourado a 12% —
+  fundo de `about-profile__contact`.
+- **Cantos dourados**: ticks em L (1 px) nos cantos superior-esquerdo e
+  inferior-direito do bloco interno do `contact-callout`.
+- **Pesos misturados**: títulos de citação e CTA final alternam romano/bold/
+  itálico por linha (`.quote-line`, `.callout-line`).
+
 ## Homepage e conversão
 
 A LP concentra os caminhos principais no WhatsApp confirmado:

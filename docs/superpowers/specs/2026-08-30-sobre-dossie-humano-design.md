@@ -11,7 +11,7 @@ fornecidas por Adriana Rodrigues Reis de Andrade
 
 ## 1. Objetivo
 
-Transformar a seção Sobre, hoje estrutural, em um perfil institucional autoral
+Transformar a página Sobre, hoje estrutural, em um perfil institucional autoral
 que apresente Adriana por meio de sua forma concreta de trabalhar: compreender
 o caso por completo, examinar fatos e documentos com critério e somente então
 delimitar uma estratégia jurídica.
@@ -125,7 +125,7 @@ Regras:
 Na abertura, a fotografia será candidata a LCP: carregamento imediato,
 prioridade alta, dimensões declaradas e espaço reservado para evitar CLS.
 
-## 6. Arquitetura da seção
+## 6. Arquitetura da página
 
 ### 6.1 Abertura — compreender antes de definir
 
@@ -144,8 +144,8 @@ fotografia à direita. No mobile, texto antes da imagem.
 
 `Compreender o caso por completo precede a definição da estratégia jurídica.`
 
-Na página única, o `h1` pertence ao hero da homepage; o título da seção Sobre é
-um `h2` para preservar a hierarquia.
+Na página única, o `h1` pertence ao hero da homepage; este título é um `h2`
+(`id="about-title"`) para preservar a hierarquia.
 
 **Apoio**
 
@@ -252,16 +252,27 @@ informações e documentos serão necessários para a análise inicial.`
 O CTA leva ao WhatsApp centralizado em `src/data/site.ts` e abre em nova aba com
 o comportamento já adotado no site.
 
-## 7. Integração na homepage
+## 7. Resumo institucional da homepage
 
-O resumo institucional (`AboutPreview`) é removido: o perfil completo
-**substitui** o resumo dentro da própria homepage, sob a âncora `#sobre` já
-existente na navegação. Não há CTA `Conheça Adriana` nem rota `/sobre/` — o
-encerramento da própria seção aponta para o WhatsApp, mantendo o funil único
-definido na spec da LP de conversão total.
+O bloco atual será mantido em sua estrutura, mas receberá copy coerente com a
+página completa.
 
-A rota `/sobre/` deixa de existir no build e recebe redirect 301 para
-`/#sobre`.
+**Título**
+
+`Antes da estratégia, vem a compreensão do caso.`
+
+**Texto**
+
+`Adriana Reis conduz cada atendimento a partir da escuta, do exame dos
+documentos e das circunstâncias próprias da situação. Somente depois dessa
+compreensão são delimitados os possíveis caminhos jurídicos.`
+
+**CTA**
+
+`Conheça Adriana`
+
+O CTA deve levar a `/sobre/`. O WhatsApp permanece no CTA final da homepage,
+evitando que todos os blocos disputem a mesma conversão.
 
 ## 8. Dados compartilhados
 
@@ -284,18 +295,21 @@ domínio definitivo.
 
 ### 9.1 Abertura
 
-Uma timeline curta coordena eyebrow, identificação, H1, apoio e fotografia. Os
+Uma timeline curta coordena eyebrow, identificação, título, apoio e fotografia. Os
 elementos entram por `autoAlpha` e pequeno deslocamento em `y`, com o retrato
 começando depois do texto principal. Não haverá animação por caractere.
 
 ### 9.2 Parallax
 
-- Desktop: deslocamento total da fotografia entre 20 e 24 px.
-- Desktop: monograma `AR` deslocado entre 8 e 12 px na direção oposta.
-- Mobile: somente a fotografia, com deslocamento máximo de 8 px.
-- Usar um único ScrollTrigger para a composição da abertura.
-- Usar `scrub` numérico moderado e `ease: "none"` no movimento ligado à
-  rolagem.
+- Desktop: deslocamento total da fotografia de 24 px de amplitude (o
+  `fromTo` percorre de −12 px a +12 px em torno do ponto de repouso).
+- Mobile: somente a fotografia, com amplitude total de 8 px (de −4 px a
+  +4 px).
+- Desktop: monograma `AR` deslocado de −6 px a +6 px (12 px de amplitude),
+  em direção oposta à da fotografia.
+- Usar um único ScrollTrigger para a composição da abertura, com `scrub`
+  de 0,8 no desktop e 0,5 no mobile, e `ease: "none"` no movimento ligado
+  à rolagem.
 - Não aplicar pinning, smooth scroll ou parallax a textos de leitura.
 
 ### 9.3 Seções
@@ -337,8 +351,8 @@ imediatamente o estado final.
 
 ## 12. Arquitetura de implementação
 
-A seção `#sobre` é composta por `AboutProfile.astro` renderizado dentro de
-`src/pages/index.astro`, no lugar do `AboutPreview`. Os limites previstos são:
+A página `/sobre/` deixa de usar `PageIntro` e passa a compor componentes Astro
+específicos e estáticos. Os limites previstos são:
 
 - abertura e fotografia;
 - narrativa e método;
@@ -351,13 +365,12 @@ somente blocos com responsabilidade visual ou script próprio; não criar uma
 abstração para cada seção.
 
 Os estilos permanecem em `src/styles/global.css`, seguindo a organização atual.
-O script GSAP fica no próprio `AboutProfile.astro`, sem criar island. O
-`AboutPreview.astro` e a rota `src/pages/sobre.astro` são removidos.
+O script GSAP fica no componente da abertura ou da página Sobre, sem criar
+island.
 
 ## 13. Verificação e aceite
 
 - `pnpm check` e `pnpm build` passam sem erros.
-- `/sobre/` responde com redirect 301 para `/#sobre`.
 - Página validada visualmente em 390 px e 1440 px.
 - Sem overflow horizontal.
 - Sem console errors.
