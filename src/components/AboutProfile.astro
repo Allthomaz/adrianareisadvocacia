@@ -1,0 +1,195 @@
+---
+import { Picture } from "astro:assets";
+import aboutImage from "../assets/images/adriana-sobre.jpeg";
+import { site, whatsappUrl } from "../data/site";
+
+const methods = [
+  {
+    number: "01",
+    title: "Escutar antes de concluir",
+    text: "O primeiro atendimento começa pela narrativa da pessoa. Perguntas ajudam a organizar juridicamente os fatos e a identificar circunstâncias que precisam ser aprofundadas antes de qualquer conclusão.",
+  },
+  {
+    number: "02",
+    title: "Examinar o conjunto, não apenas o episódio",
+    text: "Documentos, registros e detalhes aparentemente menores podem alterar a leitura do caso. Por isso, a análise procura relacionar os fatos às suas consequências jurídicas, em vez de se contentar com uma resposta imediata.",
+  },
+  {
+    number: "03",
+    title: "Orientar sem antecipar certezas",
+    text: "Depois de compreender o contexto, Adriana apresenta possibilidades, riscos e alternativas em linguagem acessível. Quando a matéria exige estudo adicional, a conclusão aguarda o exame diligente dos elementos disponíveis.",
+  },
+] as const;
+
+const serviceModes = site.professional.serviceModes
+  .join(" e ")
+  .toLocaleLowerCase("pt-BR");
+---
+
+<article class="about-profile" data-about-profile>
+  <section
+    class="about-profile__hero"
+    aria-labelledby="about-title"
+    data-about-hero
+  >
+    <span class="about-profile__monogram" aria-hidden="true" data-about-monogram
+      >AR</span
+    >
+    <div class="about-profile__hero-grid container">
+      <div class="about-profile__hero-copy">
+        <p class="eyebrow" data-about-intro>
+          <span aria-hidden="true"></span> Sobre Adriana Reis
+        </p>
+        <p class="about-profile__identity" data-about-intro>
+          {site.professional.fullName} · {site.professional.oab.display}
+        </p>
+        <h1 id="about-title" data-about-intro>
+          Compreender o caso por completo precede a definição da estratégia
+          jurídica.
+        </h1>
+        <p class="about-profile__lead" data-about-intro>
+          A atuação de Adriana começa pela escuta, avança pelo exame criterioso
+          dos fatos e documentos e considera os riscos, as alternativas e as
+          repercussões de cada caminho.
+        </p>
+      </div>
+      <div class="about-profile__photo-frame" data-about-photo-frame>
+        <div class="about-profile__photo" data-about-photo>
+          <Picture
+            src={aboutImage}
+            formats={["avif", "webp"]}
+            widths={[480, 640, 768, 1024]}
+            sizes="(max-width: 767px) calc(100vw - 2.5rem), 44vw"
+            alt="Adriana Reis em seu ambiente profissional"
+            loading="eager"
+            fetchpriority="high"
+            class="about-profile__image"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="about-profile__origin container"
+    aria-labelledby="about-origin-title"
+    data-about-reveal
+  >
+    <p class="eyebrow"><span aria-hidden="true"></span> Origem</p>
+    <div>
+      <h2 id="about-origin-title">Investigar, questionar e compreender.</h2>
+      <p>
+        Uma inclinação natural para compreender o que existe por trás de cada
+        situação e como resolvê-la conduziu Adriana ao Direito. Na advocacia,
+        encontrou um ofício em que conhecimento, estratégia e responsabilidade
+        podem ser colocados a serviço de pessoas que, diante de um problema
+        jurídico, nem sempre sabem quais caminhos têm à disposição.
+      </p>
+    </div>
+  </section>
+
+  <section class="about-profile__method" aria-labelledby="about-method-title">
+    <div class="container">
+      <header class="about-profile__section-header" data-about-reveal>
+        <p class="eyebrow">
+          <span aria-hidden="true"></span> Forma de atuação
+        </p>
+        <h2 id="about-method-title">Critério antes da conclusão.</h2>
+      </header>
+      <ol class="about-profile__method-list">
+        {
+          methods.map((method) => (
+            <li data-about-reveal>
+              <span>{method.number}</span>
+              <h3>{method.title}</h3>
+              <p>{method.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section
+    class="about-profile__quote"
+    aria-label="Princípio de atendimento"
+    data-about-reveal
+  >
+    <div class="container">
+      <blockquote>
+        “Primeiro eu preciso entender o seu caso por inteiro. Depois, nós
+        decidimos qual é o melhor caminho.”
+      </blockquote>
+      <p>Adriana Reis</p>
+    </div>
+  </section>
+
+  <section
+    class="about-profile__credentials container"
+    aria-labelledby="about-credentials-title"
+    data-about-reveal
+  >
+    <div>
+      <p class="eyebrow">
+        <span aria-hidden="true"></span> Identificação profissional
+      </p>
+      <h2 id="about-credentials-title">Formação e exercício profissional.</h2>
+      <p>
+        {site.professional.fullName} é advogada inscrita na {
+          site.professional.oab.display
+        }. Sua formação reúne graduação, pós-graduação e cursos de qualificação
+        nas áreas que integram sua atuação.
+      </p>
+    </div>
+    <ul>
+      {site.professional.education.map((item) => <li>{item}</li>)}
+    </ul>
+  </section>
+
+  <section
+    class="about-profile__service"
+    aria-labelledby="about-service-title"
+    data-about-reveal
+  >
+    <div class="about-profile__service-grid container">
+      <p class="eyebrow eyebrow--light">
+        <span aria-hidden="true"></span> Atendimento
+      </p>
+      <div>
+        <h2 id="about-service-title">
+          Presença em São Roque. Atendimento também à distância.
+        </h2>
+        <p>
+          Adriana atua profissionalmente em {site.professional.location}, com
+          atendimentos {serviceModes}. Demandas em outras localidades podem ser
+          acompanhadas quando a natureza do caso o permitir.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="about-profile__contact container"
+    aria-labelledby="about-contact-title"
+    data-about-reveal
+  >
+    <p class="eyebrow"><span aria-hidden="true"></span> Primeiro contato</p>
+    <div>
+      <h2 id="about-contact-title">
+        Cada situação começa por uma história que precisa ser compreendida.
+      </h2>
+      <p>
+        O primeiro contato permite apresentar o contexto e identificar quais
+        informações e documentos serão necessários para a análise inicial.
+      </p>
+      <a
+        class="button button--primary"
+        href={whatsappUrl}
+        target="_blank"
+        rel="noreferrer"
+      >
+        Apresente sua situação <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </section>
+</article>
