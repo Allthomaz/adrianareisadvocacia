@@ -31,14 +31,6 @@ export const site = {
 export const whatsappUrl =
   "https://wa.me/5511933535801?text=Ol%C3%A1%2C%20Adriana.%20Vim%20pelo%20site%20e%20gostaria%20de%20apresentar%20brevemente%20minha%20situa%C3%A7%C3%A3o.";
 
-export const navigation = [
-  { label: "Início", href: "/" },
-  { label: "Atuação", href: "/atuacao/" },
-  { label: "Sobre", href: "/sobre/" },
-  { label: "Conteúdos", href: "/conteudos/" },
-  { label: "Contato", href: "/contato/" },
-] as const;
-
 export const landingNavigation = [
   { label: "Atuação", href: "#atuacao" },
   { label: "Sobre", href: "#sobre" },

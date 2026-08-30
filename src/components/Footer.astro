@@ -1,5 +1,5 @@
 ---
-import { navigation, site, whatsappUrl } from "../data/site";
+import { landingNavigation, site, whatsappUrl } from "../data/site";
 
 const isLandingPage = Astro.url.pathname === "/";
 ---
@@ -24,9 +24,9 @@ const isLandingPage = Astro.url.pathname === "/";
       <ul>
         {
           !isLandingPage &&
-            navigation.slice(1).map((item) => (
+            landingNavigation.map((item) => (
               <li>
-                <a href={item.href}>{item.label}</a>
+                <a href={`/${item.href}`}>{item.label}</a>
               </li>
             ))
         }

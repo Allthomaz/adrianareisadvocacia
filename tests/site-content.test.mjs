@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { access, readdir, readFile } from "node:fs/promises";
 import test from "node:test";
 
 const readBuiltPage = (pathname) =>
@@ -12,6 +12,17 @@ const pathExists = (pathname) =>
 
 const escapeRegExp = (value) =>
   value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const listHtmlFiles = async (dir = new URL("../dist/", import.meta.url)) => {
+  const entries = await readdir(dir, { withFileTypes: true });
+  const files = await Promise.all(
+    entries.map((entry) => {
+      const path = new URL(`${entry.name}${entry.isDirectory() ? "/" : ""}`, dir);
+      return entry.isDirectory() ? listHtmlFiles(path) : Promise.resolve(path);
+    }),
+  );
+  return files.flat();
+};
 
 test("publica identificação profissional e localidade confirmadas no rodapé", async () => {
   const html = await readBuiltPage("index.html");
@@ -130,10 +141,19 @@ test("rotas secundárias viram redirects noindex para âncoras da LP", async () 
 });
 
 test("nenhum link interno aponta para rota removida", async () => {
-  const html = await readBuiltPage("index.html");
+  const htmlFiles = await listHtmlFiles();
+  // Exclui as próprias páginas de redirect (meta-refresh) geradas pelo Astro.
+  const pages = [];
+  for (const file of htmlFiles) {
+    const html = await readFile(file, "utf8");
+    if (!/http-equiv="refresh"/.test(html)) pages.push({ file, html });
+  }
+  assert.ok(pages.length >= 4, "build deve conter as páginas reais do site");
 
-  assert.doesNotMatch(html, /href="\/sobre\/"/);
-  assert.doesNotMatch(html, /href="\/atuacao\//);
-  assert.doesNotMatch(html, /href="\/contato\/"/);
-  assert.doesNotMatch(html, /href="\/conteudos\/"/);
+  for (const { file, html } of pages) {
+    assert.doesNotMatch(html, /href="\/sobre\/"/, String(file));
+    assert.doesNotMatch(html, /href="\/atuacao\//, String(file));
+    assert.doesNotMatch(html, /href="\/contato\/"/, String(file));
+    assert.doesNotMatch(html, /href="\/conteudos\/"/, String(file));
+  }
 });
