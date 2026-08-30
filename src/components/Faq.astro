@@ -1,0 +1,62 @@
+---
+import { whatsappUrl } from "../data/site";
+
+const faqs = [
+  {
+    question: "A primeira conversa gera compromisso?",
+    answer:
+      "Não. A primeira conversa serve para você apresentar o contexto da situação e para Adriana identificar quais informações e documentos a análise inicial vai precisar. Não há contratação nem compromisso nessa etapa.",
+  },
+  {
+    question: "O atendimento precisa ser presencial?",
+    answer:
+      "Não. Adriana atua em São Roque e região com atendimentos presenciais e online. Demandas de outras localidades podem ser acompanhadas quando a natureza do caso permitir.",
+  },
+  {
+    question: "O que levar para a primeira conversa?",
+    answer:
+      "A narrativa dos fatos é o principal. Documentos que já estiverem às mãos — contratos, mensagens, comprovantes, extratos — ajudam, mas nada é exigido antes da conversa.",
+  },
+  {
+    question: "Quanto custa?",
+    answer:
+      "Depende da natureza e da complexidade de cada caso. A primeira conversa permite delimitar o que será necessário antes de qualquer definição sobre honorários.",
+  },
+  {
+    question: "Quanto tempo demora?",
+    answer:
+      "Cada situação tem ritmo próprio, dependendo da análise necessária e do andamento dos órgãos envolvidos. É possível apresentar uma perspectiva inicial depois da compreensão do caso, sem promessa de prazo.",
+  },
+] as const;
+---
+
+<section class="faq" id="duvidas" aria-labelledby="faq-title">
+  <div class="container">
+    <header class="faq__header">
+      <p class="eyebrow">Antes de falar com Adriana</p>
+      <h2 id="faq-title">Dúvidas comuns</h2>
+      <p class="faq__lead">
+        Perguntas frequentes de quem está considerando uma primeira conversa.
+      </p>
+    </header>
+
+    <div class="faq__list">
+      {
+        faqs.map((item, index) => (
+          <details class="faq__item" open={index === 0}>
+            <summary>{item.question}</summary>
+            <p>{item.answer}</p>
+          </details>
+        ))
+      }
+    </div>
+
+    <p class="faq__cta">
+      A sua pergunta não está aqui?{" "}
+      <a href={whatsappUrl} target="_blank" rel="noreferrer">
+        Pergunte diretamente no WhatsApp
+      </a>
+      .
+    </p>
+  </div>
+</section>

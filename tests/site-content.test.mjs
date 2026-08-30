@@ -48,6 +48,20 @@ test("a página Sobre usa fotografia responsiva e CTA centralizado", async () =>
   assert.match(html, /Apresente sua situação/);
 });
 
+test("a homepage publica a FAQ de objeções em details nativos", async () => {
+  const html = await readBuiltPage("index.html");
+
+  assert.match(html, /id="duvidas"/);
+  assert.match(html, /<h2[^>]*>\s*Dúvidas comuns\s*<\/h2>/);
+  assert.match(html, /A primeira conversa gera compromisso\?/);
+  assert.match(html, /O atendimento precisa ser presencial\?/);
+  assert.match(html, /O que levar para a primeira conversa\?/);
+  assert.match(html, /Quanto custa\?/);
+  assert.match(html, /Quanto tempo demora\?/);
+  assert.match(html, /<details[^>]*open/);
+  assert.match(html, /wa\.me\/5511933535801/);
+});
+
 test("a página Sobre não publica alegações vedadas ou fatos recusados", async () => {
   const html = (await readBuiltPage("sobre/index.html")).toLowerCase();
 
