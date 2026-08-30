@@ -1,13 +1,31 @@
 # Retomada do projeto — Adriana Reis Advocacia
 
-**Última atualização:** 2026-08-27
+**Última atualização:** 2026-08-30
 
 ## Estado atual
 
-O site já está implementado como uma landing page responsiva em Astro 7. A
-homepage possui header em estilo glass, menu mobile, hero com fotografia
-recortada, três capítulos completos de atuação, seção sobre, orientação dos
-primeiros passos, CTA final, footer e animações GSAP com ScrollTrigger.
+O site é uma **landing page única de conversão** em Astro 7. A homepage (`/`)
+concentra todo o funil: header em estilo glass, menu mobile, hero com fotografia
+recortada, faixa de credenciais, três capítulos completos de atuação, seção
+Sobre completa (dossiê humano, com fotografia, parallax e monograma), FAQ de
+objeções em `<details>` nativos, orientação dos primeiros passos, CTA final,
+footer e animações GSAP com ScrollTrigger. A única conversão é o WhatsApp.
+
+As rotas secundárias antigas (`/sobre/`, `/atuacao/*`, `/contato/`,
+`/conteudos/`) saíram do build e têm redirects declarados em
+`astro.config.mjs` (materializados como meta-refresh no estático). **Ao
+publicar no Cloudflare, criar regras 301 equivalentes no painel.**
+
+Permanecem fora do funil: `/politica-de-privacidade/`, `/404` e as rotas de
+laboratório (`noindex`, sem chrome).
+
+## Navegação
+
+- Menu (desktop e hambúrguer): 4 itens — Atuação, Sobre, Dúvidas,
+  Como começar — todos âncoras da LP, definidos em `landingNavigation`.
+- O array `navigation` (5 itens) foi extinto; Header, MobileMenu e Footer usam
+  apenas `landingNavigation`.
+- Botão WhatsApp fixo no header e no painel mobile.
 
 Antes de alterar qualquer coisa:
 
@@ -42,14 +60,20 @@ diretivas `client:*`.
 
 ## Arquitetura relevante
 
-- `src/pages/index.astro` — homepage/LP.
+- `src/pages/index.astro` — homepage/LP (única rota pública de funil).
 - `src/layouts/BaseLayout.astro` — metadados, header/footer e opção `chrome`.
-- `src/data/site.ts` — fonte central de navegação, WhatsApp e áreas de atuação.
+- `src/data/site.ts` — fonte central de navegação (`landingNavigation`),
+  WhatsApp, fatos profissionais e áreas de atuação.
 - `src/components/Header.astro` e `MobileMenu.astro` — navegação e menu.
 - `src/components/Hero.astro` — hero atual.
+- `src/components/CredentialsStrip.astro` — faixa OAB/localidade/atendimento.
 - `src/components/PracticeAreas.astro` — orquestração GSAP/ScrollTrigger.
 - `src/components/PracticeChapter.astro` — capítulo de cada área.
+- `src/components/AboutProfile.astro` — seção Sobre completa (dossiê humano,
+  fotografia, parallax e monograma), com script GSAP próprio.
+- `src/components/Faq.astro` — FAQ de objeções em `<details>` nativos.
 - `src/styles/global.css` — tokens e estilos globais mobile-first.
+- `astro.config.mjs` — redirects das rotas antigas (meta-refresh no estático).
 
 Rotas de laboratório, com `noindex` e sem chrome do site:
 
@@ -186,9 +210,19 @@ canal alfa real quando o ativo for um recorte.
 
 ## Próximas etapas recomendadas
 
-1. Validar a entrada dos cards 01/04 no primeiro scroll em navegador real, sem
-   redimensionar a viewport com DevTools durante a animação.
-2. Coletar respostas da Adriana para escrever a seção “Sobre”.
-3. Confirmar OAB/UF, cidade, abrangência e domínio.
-4. Revisar a copy com a cliente antes da publicação.
+1. Revisar com a Adriana toda a copy antes da publicação — **incluindo a FAQ**
+   (seção 5.2 da spec da LP): a aprovação dela é condição de publicação.
+2. Validar a entrada dos cards 01/04 no primeiro scroll e o parallax do Sobre
+   em navegador real, sem redimensionar a viewport com DevTools durante a
+   animação.
+3. Confirmar domínio definitivo (`site.url` é placeholder `.example`).
+4. Ao publicar no Cloudflare, criar regras 301 equivalentes aos redirects de
+   `astro.config.mjs`.
 5. Criar teste automatizado de rolagem para long tasks e regressões.
+
+## Testes
+
+- `pnpm test:site` — build + `tests/site-content.test.mjs` (contratos de
+  conteúdo, menu, redirects e rotas mortas) + `tests/sobre-motion.test.mjs`
+  (movimento no Chrome headless: desktop, mobile 390 px e reduced-motion;
+  sobe um `astro preview` na porta 4333).
