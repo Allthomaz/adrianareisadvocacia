@@ -1,7 +1,6 @@
 ---
 import { Picture } from "astro:assets";
 import portraitImage from "../assets/images/adriana-portrait-cutout.png";
-import { whatsappUrl } from "../data/site";
 ---
 
 <section class="about-preview" id="sobre" aria-labelledby="about-preview-title">
@@ -22,20 +21,15 @@ import { whatsappUrl } from "../data/site";
     <div class="about-preview__content">
       <p class="eyebrow"><span aria-hidden="true"></span> Sobre Adriana Reis</p>
       <h2 id="about-preview-title">
-        Uma presença pessoal à frente do escritório.
+        Antes da estratégia, vem a compreensão do caso.
       </h2>
       <p>
-        Adriana Reis dá nome e rosto ao escritório e atua em questões de Direito
-        Civil, Trabalhista e Previdenciário. Cada situação precisa ser
-        considerada a partir de seu contexto e de seus documentos.
+        Adriana Reis conduz cada atendimento a partir da escuta, do exame dos
+        documentos e das circunstâncias próprias da situação. Somente depois
+        dessa compreensão são delimitados os possíveis caminhos jurídicos.
       </p>
-      <a
-        class="button button--primary"
-        href={whatsappUrl}
-        target="_blank"
-        rel="noreferrer"
-      >
-        Falar com Adriana <span aria-hidden="true">↗</span>
+      <a class="button button--primary" href="/sobre/">
+        Conheça Adriana <span aria-hidden="true">→</span>
       </a>
     </div>
   </div>

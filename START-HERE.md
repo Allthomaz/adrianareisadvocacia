@@ -123,14 +123,25 @@ Confirmado:
 - WhatsApp `+55 11 93353-5801` como canal principal.
 - Frentes Civil, Trabalhista e Previdenciário.
 - Conteúdo concreto das áreas em `src/data/site.ts`.
+- Nome completo: Adriana Rodrigues Reis de Andrade.
+- OAB/SP nº 533.644.
+- Atuação profissional em São Roque e região.
+- Atendimento presencial e online, com possibilidade de acompanhamento em
+  outras localidades quando a natureza do caso permitir.
+- Bacharel em Direito pela Universidade Nove de Julho — UNINOVE.
+- Pós-graduada em Direito Civil e Processual Civil pela Legale Educacional.
+- Cursos de qualificação em Direito e Processo do Trabalho e em Direito
+  Previdenciário.
+- Uso da fotografia atual autorizado para a página Sobre.
 
 Ainda não confirmado:
 
-- OAB e seccional.
 - E-mail e outros canais.
-- Cidade, localidade e abrangência.
+- Endereço profissional e horários de atendimento.
 - Domínio definitivo.
-- Formação, trajetória e informações pessoais para completar o “Sobre”.
+
+Por decisão da Adriana, o ano de início da trajetória profissional não deve ser
+publicado neste momento.
 
 Não inventar nenhum desses dados. `site.url` usa domínio `.example` e não pode
 ir para produção sem confirmação.
@@ -150,6 +161,10 @@ Recortes com transparência real:
 - `src/assets/images/adriana-hero-navy-cutout.png` — hero principal.
 - `src/assets/images/adriana-hero-light-cutout.png` — alternativa clara.
 - `src/assets/images/adriana-portrait-cutout.png` — retrato quadrado.
+
+Fotografia autorizada para a página Sobre:
+
+- `assets/references/foto-adriana-atual.jpeg` — fonte original, sem retoques.
 
 Logo do header: `public/images/brand/adriana-reis-logo-wine.png`.
 

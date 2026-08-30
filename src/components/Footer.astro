@@ -42,6 +42,11 @@ const isLandingPage = Astro.url.pathname === "/";
     </div>
   </div>
   <div class="site-footer__legal container">
+    <div class="site-footer__professional">
+      <p>{site.professional.fullName}</p>
+      <p>{site.professional.oab.display}</p>
+      <p>{site.professional.location}</p>
+    </div>
     <p>© {new Date().getFullYear()} Adriana Reis Advocacia.</p>
     <p>Conteúdo informativo. Cada situação requer análise individual.</p>
   </div>

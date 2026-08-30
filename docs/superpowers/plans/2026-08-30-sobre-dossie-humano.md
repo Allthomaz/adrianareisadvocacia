@@ -39,7 +39,7 @@
 - `src/assets/images/adriana-sobre.jpeg` — cópia de trabalho, sem retoque, processada pelo Astro.
 - `src/styles/global.css` — layout, responsividade e estados visuais da página.
 - `tests/site-content.test.mjs` — contrato do HTML estático gerado e dos fatos publicados.
-- `tests/sobre-motion.test.mjs` — guardrails de movimento e performance verificados no código-fonte.
+- `tests/sobre-motion.test.mjs` — comportamento de movimento e redução verificado no Chrome headless.
 - `package.json` — script reproduzível de teste do site.
 - `START-HERE.md` — estado factual e arquitetura atualizados.
 
@@ -458,31 +458,76 @@ git commit -m "feat: criar conteúdo institucional da página Sobre"
 
 **Interfaces:**
 - Consumes: hooks `data-about-profile`, `data-about-hero`, `data-about-photo`, `data-about-monogram`, `data-about-intro` e `data-about-reveal` da Task 2.
-- Produces: experiência progressivamente aprimorada com `gsap.matchMedia()` e CSS mobile-first; nenhum conteúdo depende do script.
+- Produces: experiência progressivamente aprimorada com `gsap.matchMedia()` e CSS mobile-first; `data-motion-state` expõe o estado efetivo para diagnóstico sem controlar a apresentação.
 
-- [ ] **Step 1: Escrever o guardrail de movimento antes do script**
+- [ ] **Step 1: Escrever o teste comportamental de movimento antes do script**
 
 Criar `tests/sobre-motion.test.mjs`:
 
 ```js
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
-import test from "node:test";
+import { execFile, spawn } from "node:child_process";
+import { promisify } from "node:util";
+import test, { after, before } from "node:test";
 
-const sourceUrl = new URL("../src/components/AboutProfile.astro", import.meta.url);
+const execFileAsync = promisify(execFile);
+const previewUrl = "http://127.0.0.1:4333/sobre/";
+let preview;
 
-test("o movimento da página Sobre é responsivo, reduzível e sem pinning", async () => {
-  const source = await readFile(sourceUrl, "utf8");
+before(async () => {
+  preview = spawn(
+    "pnpm",
+    ["exec", "astro", "preview", "--host", "127.0.0.1", "--port", "4333"],
+    { detached: true, stdio: "ignore" },
+  );
 
-  assert.match(source, /gsap\.matchMedia\(\)/);
-  assert.match(source, /prefers-reduced-motion: reduce/);
-  assert.match(source, /min-width: 48rem/);
-  assert.match(source, /scrub:\s*desktop \? 0\.8 : 0\.5/);
-  assert.match(source, /desktop \? 24 : 8/);
-  assert.doesNotMatch(source, /pin:\s*true/);
-  assert.doesNotMatch(source, /ScrollSmoother/);
-  assert.match(source, /astro:before-swap/);
-  assert.match(source, /media\.revert\(\)/);
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    try {
+      const response = await fetch(previewUrl);
+      if (response.ok) return;
+    } catch {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+  }
+
+  throw new Error("Astro preview não iniciou na porta 4333");
+});
+
+after(() => {
+  if (preview?.pid) process.kill(-preview.pid, "SIGTERM");
+});
+
+const dumpDom = async (extraFlags = []) => {
+  const { stdout } = await execFileAsync(
+    "/usr/bin/google-chrome",
+    [
+      "--headless=new",
+      "--disable-gpu",
+      "--no-sandbox",
+      "--virtual-time-budget=2500",
+      ...extraFlags,
+      "--dump-dom",
+      previewUrl,
+    ],
+    { maxBuffer: 10 * 1024 * 1024 },
+  );
+  return stdout;
+};
+
+test("ativa a composição animada e transforma a fotografia", async () => {
+  const html = await dumpDom();
+  const photo = html.match(/<div class="about-profile__photo"[^>]*>/)?.[0] ?? "";
+
+  assert.match(html, /data-motion-state="active"/);
+  assert.match(photo, /style="[^"]*transform:/);
+});
+
+test("movimento reduzido entrega o estado final sem transformar a fotografia", async () => {
+  const html = await dumpDom(["--force-prefers-reduced-motion"]);
+  const photo = html.match(/<div class="about-profile__photo"[^>]*>/)?.[0] ?? "";
+
+  assert.match(html, /data-motion-state="reduced"/);
+  assert.doesNotMatch(photo, /style=/);
 });
 ```
 
@@ -490,7 +535,7 @@ test("o movimento da página Sobre é responsivo, reduzível e sem pinning", asy
 
 Run: `pnpm test:site`
 
-Expected: FAIL porque `AboutProfile.astro` ainda não importa GSAP nem contém `matchMedia`, `scrub` ou cleanup.
+Expected: os dois testes FAIL porque a página ainda não declara `data-motion-state` nem aplica transformação à fotografia.
 
 - [ ] **Step 3: Adicionar a orquestração GSAP ao final de `AboutProfile.astro`**
 
@@ -526,11 +571,14 @@ Adicionar:
         const revealItems = profile.querySelectorAll<HTMLElement>("[data-about-reveal]");
 
         if (reduceMotion || !hero || !photoFrame || !photo) {
+          profile.dataset.motionState = "reduced";
           gsap.set([introItems, photoFrame, photo, monogram, revealItems], {
             clearProps: "all",
           });
           return;
         }
+
+        profile.dataset.motionState = "active";
 
         const intro = gsap.timeline({
           defaults: { duration: desktop ? 0.72 : 0.5, ease: "power2.out" },

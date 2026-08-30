@@ -6,12 +6,25 @@ export const site = {
   defaultTitle: "Adriana Reis Advocacia",
   defaultDescription:
     "Atuação jurídica em Direito Civil, Trabalhista e Previdenciário, com informações institucionais e canal de contato.",
+  professional: {
+    fullName: "Adriana Rodrigues Reis de Andrade",
+    oab: {
+      jurisdiction: "SP",
+      number: "533.644",
+      display: "OAB/SP nº 533.644",
+    },
+    location: "São Roque e região",
+    serviceModes: ["Presencial", "Online"],
+    education: [
+      "Bacharel em Direito pela Universidade Nove de Julho — UNINOVE",
+      "Pós-graduada em Direito Civil e Processual Civil pela Legale Educacional",
+      "Cursos de qualificação em Direito e Processo do Trabalho e em Direito Previdenciário",
+    ],
+  },
   contact: {
     email: null,
     phone: "+55 11 93353-5801",
     whatsapp: "+55 11 93353-5801",
-    location: null,
-    oab: null,
   },
 } as const;
 
@@ -170,7 +183,7 @@ export const practiceAreas = [
 export type PracticeArea = (typeof practiceAreas)[number];
 
 export const pendingFacts = [
-  "OAB e seccional",
   "E-mail e demais canais de contato",
-  "Cidade e abrangência do atendimento",
+  "Endereço profissional e horários de atendimento",
+  "Domínio definitivo",
 ] as const;
