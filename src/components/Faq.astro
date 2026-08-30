@@ -31,12 +31,19 @@ const faqs = [
 ---
 
 <section class="faq" id="duvidas" aria-labelledby="faq-title">
-  <div class="container">
+  <div class="faq__grid container">
     <header class="faq__header">
       <p class="eyebrow">Antes de falar com Adriana</p>
       <h2 id="faq-title">Dúvidas comuns</h2>
       <p class="faq__lead">
         Perguntas frequentes de quem está considerando uma primeira conversa.
+      </p>
+      <p class="faq__cta">
+        A sua pergunta não está aqui?{" "}
+        <a href={whatsappUrl} target="_blank" rel="noreferrer">
+          Pergunte diretamente no WhatsApp
+        </a>
+        .
       </p>
     </header>
 
@@ -50,13 +57,5 @@ const faqs = [
         ))
       }
     </div>
-
-    <p class="faq__cta">
-      A sua pergunta não está aqui?{" "}
-      <a href={whatsappUrl} target="_blank" rel="noreferrer">
-        Pergunte diretamente no WhatsApp
-      </a>
-      .
-    </p>
   </div>
 </section>

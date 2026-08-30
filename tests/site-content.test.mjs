@@ -44,7 +44,10 @@ test("a homepage publica o método, a citação e as credenciais aprovadas", asy
   assert.match(html, /Examinar o conjunto, não apenas o episódio/);
   assert.match(html, /Orientar sem antecipar certezas/);
   assert.match(html, /<blockquote/);
-  assert.match(html, /Primeiro eu preciso entender o seu caso por inteiro\./);
+  assert.match(
+    html,
+    /Primeiro eu preciso entender<\/span>[\s\S]*?o seu caso por inteiro\./,
+  );
   assert.match(html, /Universidade Nove de Julho/);
   assert.match(html, /Legale Educacional/);
   assert.match(html, /Atendimento também à distância/);
