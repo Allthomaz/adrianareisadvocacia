@@ -2,14 +2,10 @@
 import { whatsappUrl } from "../data/site";
 
 interface Props {
-  currentPath: string;
   items: ReadonlyArray<{ label: string; href: string }>;
-  isLandingPage?: boolean;
 }
 
-const { currentPath, items, isLandingPage = false } = Astro.props;
-const isCurrent = (href: string) =>
-  href === "/" ? currentPath === "/" : currentPath.startsWith(href);
+const { items } = Astro.props;
 ---
 
 <button
@@ -32,14 +28,7 @@ const isCurrent = (href: string) =>
       {
         items.map((item) => (
           <li>
-            <a
-              href={item.href}
-              aria-current={
-                !isLandingPage && isCurrent(item.href) ? "page" : undefined
-              }
-            >
-              {item.label}
-            </a>
+            <a href={item.href}>{item.label}</a>
           </li>
         ))
       }

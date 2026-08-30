@@ -62,6 +62,35 @@ test("a homepage publica a FAQ de objeções em details nativos", async () => {
   assert.match(html, /wa\.me\/5511933535801/);
 });
 
+test("a navegação da LP tem exatamente os 4 itens aprovados", async () => {
+  const html = await readBuiltPage("index.html");
+  // O rodapé usa nav própria (âncoras distintas), então o teste considera
+  // apenas os navs do header: desktop ("Navegação principal") e mobile
+  // ("Navegação móvel").
+  const headerNavs =
+    html.match(
+      /<nav[^>]*aria-label="Navegação (principal|móvel)"[^>]*>[\s\S]*?<\/nav>/g,
+    ) ?? [];
+
+  assert.ok(headerNavs.length === 2);
+  for (const nav of headerNavs) {
+    assert.match(nav, /href="#atuacao"[^>]*>\s*Atuação/);
+    assert.match(nav, /href="#sobre"[^>]*>\s*Sobre/);
+    assert.match(nav, /href="#duvidas"[^>]*>\s*Dúvidas/);
+    assert.match(nav, /href="#como-comecar"[^>]*>\s*Como começar/);
+    assert.doesNotMatch(nav, /Conteúdos|Contato/);
+  }
+});
+
+test("a faixa de credenciais segue o hero", async () => {
+  const html = await readBuiltPage("index.html");
+
+  assert.match(html, /OAB\/SP nº 533\.644/);
+  assert.match(html, /São Roque e região/);
+  // "Online" vem maiúsculo em site.ts e o CSS aplica uppercase ao renderizar.
+  assert.match(html, /Presencial e [Oo]nline/);
+});
+
 test("a página Sobre não publica alegações vedadas ou fatos recusados", async () => {
   const html = (await readBuiltPage("sobre/index.html")).toLowerCase();
 

@@ -41,8 +41,9 @@ export const navigation = [
 
 export const landingNavigation = [
   { label: "Atuação", href: "#atuacao" },
-  { label: "Como começar", href: "#como-comecar" },
   { label: "Sobre", href: "#sobre" },
+  { label: "Dúvidas", href: "#duvidas" },
+  { label: "Como começar", href: "#como-comecar" },
 ] as const;
 
 export const practiceAreas = [

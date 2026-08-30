@@ -424,6 +424,33 @@ a {
   width: 100%;
 }
 
+.credentials-strip {
+  border-block: 1px solid rgb(118 38 56 / 14%);
+  background: var(--color-ivory-50);
+}
+
+.credentials-strip__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+  justify-content: center;
+  padding-block: 0.9rem;
+}
+
+.credentials-strip__item {
+  color: rgb(40 36 34 / 68%);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.credentials-strip__item + .credentials-strip__item::before {
+  content: "·";
+  margin-right: 2rem;
+  color: var(--color-gold-500);
+}
+
 .hero {
   position: relative;
   min-height: 100svh;
