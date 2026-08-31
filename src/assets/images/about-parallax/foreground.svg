@@ -1,12 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1536" viewBox="0 0 1024 1536">
   <g fill="none" stroke="#b78a55" stroke-linecap="square">
-    <path d="M54 154v-96h96 M874 58h96v96" stroke-width="2" opacity=".82" />
-    <path d="M54 1382v96h96 M874 1478h96v-96" stroke-width="2" opacity=".82" />
-    <path d="M82 256v1024 M942 256v1024" stroke-width="1" opacity=".34" />
-    <path d="M96 194h226 M702 1342h226" stroke-width="1.5" opacity=".58" />
-    <path d="M812 116c92 86 123 184 92 294-20 70-64 136-132 198" stroke-width="2" opacity=".34" />
-    <path d="M846 104c-58 118-65 226-21 324 22 49 61 96 117 141" stroke-width="1" opacity=".3" />
-    <path d="M212 1420c-92-86-123-184-92-294 20-70 64-136 132-198" stroke-width="2" opacity=".34" />
-    <path d="M178 1432c58-118 65-226 21-324-22-49-61-96-117-141" stroke-width="1" opacity=".3" />
+    <path d="M23 114h138M863 114h138M23 1422h138M863 1422h138" stroke-width="1" opacity=".46" />
+    <path d="M22 158h140M862 158h140M22 1378h140M862 1378h140" stroke-width="1" opacity=".24" />
+    <path d="M176 166v1204M848 166v1204" stroke-width="1" opacity=".16" />
   </g>
 </svg>

@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "test:site": "astro build && node --test tests/*.test.mjs",
+    "composio": "node --env-file-if-exists=.env.local scripts/composio.mjs",
+    "test:site": "astro build && node --import tsx --test tests/*.test.mjs",
     "preview": "astro preview",
     "preview:worker": "astro build && wrangler dev",
     "deploy": "astro build && wrangler deploy",
@@ -23,13 +24,17 @@
     "astro": "^7.2.9",
     "gsap": "^3.15.0",
     "sharp": "^0.35.4",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "three": "^0.185.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@composio/core": "^0.18.0",
+    "@types/three": "^0.185.4",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "tsx": "^4.23.13",
     "wrangler": "^4.127.0"
   }
 }

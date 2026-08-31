@@ -1299,6 +1299,39 @@ a {
   box-shadow: 0 2rem 5rem rgb(40 36 34 / 12%);
 }
 
+.about-profile__parallax-host {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 420ms ease;
+}
+
+.about-profile__parallax-host canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.about-profile__photo-frame:is(
+    [data-parallax-state="active"],
+    [data-parallax-state="paused"],
+    [data-parallax-state="ready"]
+  )
+  .about-profile__parallax-host {
+  opacity: 1;
+}
+
+.about-profile__photo-frame:is(
+    [data-parallax-state="active"],
+    [data-parallax-state="paused"],
+    [data-parallax-state="ready"]
+  )
+  .about-profile__photo {
+  opacity: 0;
+}
+
 .about-profile__photo,
 .about-profile__photo picture,
 .about-profile__image {
@@ -1309,6 +1342,7 @@ a {
 .about-profile__photo {
   position: absolute;
   inset: -0.75rem 0;
+  transition: opacity 420ms ease;
 }
 
 .about-profile__image {
@@ -1901,6 +1935,11 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .about-profile__parallax-host,
+  .about-profile__photo {
+    transition: none;
+  }
+
   html {
     scroll-behavior: auto;
   }

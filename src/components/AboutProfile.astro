@@ -53,8 +53,24 @@ const serviceModes = site.professional.serviceModes
           repercussões de cada caminho.
         </p>
       </div>
-      <div class="about-profile__photo-frame" data-about-photo-frame>
-        <div class="about-profile__photo" data-about-photo>
+      <div
+        id="about-parallax-frame"
+        class="about-profile__photo-frame"
+        data-about-photo-frame
+        data-about-parallax-frame
+        data-parallax-state="fallback"
+      >
+        <div
+          class="about-profile__parallax-host"
+          data-about-parallax-host
+          aria-hidden="true"
+        >
+        </div>
+        <div
+          class="about-profile__photo"
+          data-about-photo
+          data-about-parallax-fallback
+        >
           <Picture
             src={aboutImage}
             formats={["avif", "webp"]}
@@ -206,6 +222,7 @@ const serviceModes = site.professional.serviceModes
 <script>
   import { gsap } from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
+  import { mountAboutParallax } from "../scripts/about-parallax-controller";
 
   gsap.registerPlugin(ScrollTrigger);
 
@@ -213,6 +230,24 @@ const serviceModes = site.professional.serviceModes
 
   if (profile) {
     const media = gsap.matchMedia();
+    const parallaxFrame = profile.querySelector<HTMLElement>(
+      "[data-about-parallax-frame]",
+    );
+    const parallaxHost = profile.querySelector<HTMLElement>(
+      "[data-about-parallax-host]",
+    );
+    const parallaxFallback = profile.querySelector<HTMLElement>(
+      "[data-about-parallax-fallback]",
+    );
+    const disposeParallax =
+      parallaxFrame && parallaxHost && parallaxFallback
+        ? mountAboutParallax({
+            frame: parallaxFrame,
+            host: parallaxHost,
+            fallback: parallaxFallback,
+            profileRoot: profile,
+          })
+        : () => {};
 
     media.add(
       {
@@ -277,27 +312,6 @@ const serviceModes = site.professional.serviceModes
             0.18,
           );
 
-        const photoTravel = desktop ? 24 : 8;
-        const parallax = gsap.timeline({
-          scrollTrigger: {
-            trigger: hero,
-            start: "top top",
-            end: "bottom top",
-            scrub: desktop ? 0.8 : 0.5,
-          },
-        });
-
-        parallax.fromTo(
-          photo,
-          { y: photoTravel * -0.5 },
-          { y: photoTravel * 0.5, ease: "none" },
-          0,
-        );
-
-        if (desktop && monogram) {
-          parallax.fromTo(monogram, { y: -6 }, { y: 6, ease: "none" }, 0);
-        }
-
         revealItems.forEach((item) => {
           gsap.fromTo(
             item,
@@ -319,13 +333,17 @@ const serviceModes = site.professional.serviceModes
 
         return () => {
           intro.kill();
-          parallax.kill();
         };
       },
     );
 
-    document.addEventListener("astro:before-swap", () => media.revert(), {
-      once: true,
-    });
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        disposeParallax();
+        media.revert();
+      },
+      { once: true },
+    );
   }
 </script>

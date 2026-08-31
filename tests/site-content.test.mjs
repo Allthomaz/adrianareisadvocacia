@@ -10,14 +10,16 @@ const pathExists = (pathname) =>
     .then(() => true)
     .catch(() => false);
 
-const escapeRegExp = (value) =>
-  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const listHtmlFiles = async (dir = new URL("../dist/", import.meta.url)) => {
   const entries = await readdir(dir, { withFileTypes: true });
   const files = await Promise.all(
     entries.map((entry) => {
-      const path = new URL(`${entry.name}${entry.isDirectory() ? "/" : ""}`, dir);
+      const path = new URL(
+        `${entry.name}${entry.isDirectory() ? "/" : ""}`,
+        dir,
+      );
       return entry.isDirectory() ? listHtmlFiles(path) : Promise.resolve(path);
     }),
   );
@@ -60,6 +62,10 @@ test("a seção Sobre usa fotografia responsiva e CTA centralizado", async () =>
   assert.match(html, /<picture/);
   assert.match(html, /alt="Adriana Reis em seu ambiente profissional"/);
   assert.match(html, /fetchpriority="high"/);
+  assert.match(html, /data-about-parallax-frame/);
+  assert.match(html, /data-about-parallax-host[^>]*aria-hidden="true"/);
+  assert.match(html, /data-about-parallax-fallback/);
+  assert.match(html, /data-parallax-state="fallback"/);
   assert.match(html, /href="https:\/\/wa\.me\/5511933535801/);
   assert.match(html, /Apresente sua situação/);
 });
@@ -136,7 +142,9 @@ test("rotas secundárias viram redirects noindex para âncoras da LP", async () 
     const html = await readBuiltPage(pathname);
     assert.match(
       html,
-      new RegExp(`http-equiv="refresh" content="0;url=${escapeRegExp(target)}"`),
+      new RegExp(
+        `http-equiv="refresh" content="0;url=${escapeRegExp(target)}"`,
+      ),
       `${pathname} deve redirecionar para ${target}`,
     );
     assert.match(html, /name="robots" content="noindex"/, pathname);
