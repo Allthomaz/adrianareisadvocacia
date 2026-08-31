@@ -116,6 +116,40 @@ existente e sem novas fontes:
 - **Pesos misturados**: títulos de citação e CTA final alternam romano/bold/
   itálico por linha (`.quote-line`, `.callout-line`).
 
+## Parallax do Sobre
+
+O retrato do Sobre usa Three.js como composição 2.5D, mas só quando o navegador
+suporta WebGL e a moldura se aproxima da viewport:
+
+- Fundo: a fotografia original permanece imóvel.
+- Primeiro plano: o recorte transparente da Adriana e linhas douradas sutis
+  se movem sobre esse fundo, criando profundidade sem alterar a imagem.
+- Desktop: rolagem + ponteiro dentro da moldura.
+- Mobile (390 px): somente rolagem; não há interação por ponteiro.
+- `prefers-reduced-motion`, falha de WebGL ou JavaScript ausente: a fotografia
+  estática responsiva é o fallback obrigatório.
+- A cena pausa fora da viewport e só carrega nas proximidades; não adicionar
+  parallax de leitura a textos nem animar `clip-path` no scroll.
+
+Os módulos ficam em `src/scripts/about-parallax-*.ts` e os três planos em
+`src/assets/images/about-parallax/`. Os testes de navegador usam o protocolo
+remoto do Chrome — não trocar por `--dump-dom`, que serializa antes do
+carregamento assíncrono do WebGL.
+
+## Integrações e repositório
+
+- O remoto Git está configurado como `origin` em
+  `https://github.com/Allthomaz/adrianareisadvocacia.git`; `main` acompanha
+  `origin/main`.
+- A skill Composio está em `.agents/skills/composio/`. O comando
+  `pnpm composio` usa `scripts/composio.mjs` para descobrir, conectar e chamar
+  ferramentas externas.
+- Chaves ficam exclusivamente em `.env.local`, ignorado pelo Git.
+  `.env.example` contém apenas placeholders. Nunca enviar uma chave real para
+  o repositório.
+- Para remoção de fundo via Claid/Composio, a ferramenta requer uma URL pública
+  do arquivo; imagens locais não são aceitas diretamente.
+
 ## Homepage e conversão
 
 A LP concentra os caminhos principais no WhatsApp confirmado:
