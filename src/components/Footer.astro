@@ -36,7 +36,14 @@ const isLandingPage = Astro.url.pathname === "/";
 
     <div>
       <p class="site-footer__heading">Contato</p>
-      <a href={whatsappUrl} target="_blank" rel="noreferrer">
+      <a
+        href={whatsappUrl}
+        target="_blank"
+        rel="noreferrer"
+        data-analytics-event="whatsapp_click"
+        data-analytics-placement="footer"
+        data-analytics-label="WhatsApp"
+      >
         WhatsApp {site.contact.whatsapp}
       </a>
     </div>

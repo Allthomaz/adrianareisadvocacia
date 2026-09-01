@@ -40,7 +40,14 @@ const faqs = [
       </p>
       <p class="faq__cta">
         A sua pergunta não está aqui?{" "}
-        <a href={whatsappUrl} target="_blank" rel="noreferrer">
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noreferrer"
+          data-analytics-event="whatsapp_click"
+          data-analytics-placement="faq"
+          data-analytics-label="Pergunte diretamente no WhatsApp"
+        >
           Pergunte diretamente no WhatsApp
         </a>
         .

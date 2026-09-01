@@ -1,0 +1,30 @@
+---
+import VercelAnalytics from "@vercel/analytics/astro";
+import SpeedInsights from "@vercel/speed-insights/astro";
+---
+
+<VercelAnalytics />
+<SpeedInsights />
+
+<script>
+  import { trackEvent } from "../scripts/analytics-events";
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    const link = target.closest<HTMLAnchorElement>(
+      '[data-analytics-event="whatsapp_click"]',
+    );
+    if (!link) return;
+
+    const placement = link.dataset.analyticsPlacement;
+    const label = link.dataset.analyticsLabel;
+    if (!placement || !label) return;
+
+    trackEvent({
+      name: "whatsapp_click",
+      properties: { placement, label },
+    });
+  });
+</script>

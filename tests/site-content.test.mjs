@@ -197,7 +197,7 @@ test("publica somente o domínio canônico confirmado em URLs públicas", async 
 test("publica metadata Open Graph e Twitter completa com imagem canônica", async () => {
   const html = await readBuiltPage("index.html");
   const canonicalImage =
-    "https://www.dradrireisadvocacia.com.br/images/brand/adriana-reis-logo-wine.png";
+    "https://www.dradrireisadvocacia.com.br/og-adriana-reis.jpg";
 
   assert.match(html, /property="og:title" content="[^"]+"/);
   assert.match(html, /property="og:description" content="[^"]+"/);
@@ -209,11 +209,11 @@ test("publica metadata Open Graph e Twitter completa com imagem canônica", asyn
     html,
     new RegExp(`property="og:image" content="${canonicalImage}"`),
   );
-  assert.match(html, /property="og:image:width" content="940"/);
-  assert.match(html, /property="og:image:height" content="460"/);
+  assert.match(html, /property="og:image:width" content="1200"/);
+  assert.match(html, /property="og:image:height" content="630"/);
   assert.match(
     html,
-    /property="og:image:alt" content="Adriana Reis Advocacia"/,
+    /property="og:image:alt" content="Adriana Reis, advogada, em imagem institucional do site Adriana Reis Advocacia\."/,
   );
   assert.match(html, /name="twitter:card" content="summary_large_image"/);
   assert.match(html, /name="twitter:title" content="[^"]+"/);
@@ -224,7 +224,7 @@ test("publica metadata Open Graph e Twitter completa com imagem canônica", asyn
   );
   assert.match(
     html,
-    /name="twitter:image:alt" content="Adriana Reis Advocacia"/,
+    /name="twitter:image:alt" content="Adriana Reis, advogada, em imagem institucional do site Adriana Reis Advocacia\."/,
   );
 });
 
@@ -325,4 +325,19 @@ test("llms.txt v2 descreve somente recursos reais e é descoberto pela homepage"
   }
   assert.doesNotMatch(llms, /pol[ií]tica-de-privacidade/i);
   assert.doesNotMatch(llms, /adriana-reis-advocacia\.example|vercel\.app/);
+});
+
+test("todos os links de WhatsApp da homepage registram uma única conversão humana", async () => {
+  const html = await readBuiltPage("index.html");
+  const links = [...html.matchAll(/<a\b[^>]*href="https:\/\/wa\.me\/[^>]+>/g)].map(
+    ([link]) => link,
+  );
+
+  assert.equal(links.length, 10);
+  for (const link of links) {
+    assert.match(link, /data-analytics-event="whatsapp_click"/);
+    assert.match(link, /data-analytics-placement="[^"]+"/);
+    assert.match(link, /data-analytics-label="[^"]+"/);
+    assert.doesNotMatch(link, /data-analytics-event="cta_click"/);
+  }
 });
