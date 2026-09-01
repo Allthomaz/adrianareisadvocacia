@@ -1,0 +1,20 @@
+<script>
+  import {
+    registerWebMcpTools,
+    type WebMcpModelContext,
+  } from "../scripts/webmcp-tools";
+
+  const modelContext = (
+    document as Document & { modelContext?: WebMcpModelContext }
+  ).modelContext;
+
+  if (modelContext) {
+    registerWebMcpTools(modelContext)
+      .then((dispose) => {
+        document.addEventListener("astro:before-swap", dispose, { once: true });
+      })
+      .catch(() => {
+        // WebMCP é experimental; falhas de registro não afetam a interface.
+      });
+  }
+</script>

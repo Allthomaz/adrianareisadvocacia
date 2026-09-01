@@ -1,0 +1,15 @@
+# Adriana Reis Advocacia
+
+> Site institucional de Adriana Reis, com informações sobre atuação em Direito Civil, Direito Trabalhista e Direito Previdenciário e canal público de contato.
+
+O conteúdo é informativo. Cada situação requer análise individual.
+
+## Principal
+
+- [Página inicial](https://www.dradrireisadvocacia.com.br/): apresenta a atuação, Adriana Reis, dúvidas comuns, primeiros passos e contato.
+- [Direito Civil](https://www.dradrireisadvocacia.com.br/#direito-civil): situações civis publicadas no site.
+- [Direito Trabalhista](https://www.dradrireisadvocacia.com.br/#direito-trabalhista): situações trabalhistas publicadas no site.
+- [Direito Previdenciário](https://www.dradrireisadvocacia.com.br/#direito-previdenciario): situações previdenciárias publicadas no site.
+- [Sobre Adriana Reis](https://www.dradrireisadvocacia.com.br/#sobre): identificação, formação e forma de atuação publicadas.
+- [Dúvidas comuns](https://www.dradrireisadvocacia.com.br/#duvidas): respostas sobre a primeira conversa e o atendimento.
+- [Como começar](https://www.dradrireisadvocacia.com.br/#como-comecar): orientações publicadas para o primeiro contato.

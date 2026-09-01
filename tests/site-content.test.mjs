@@ -168,3 +168,161 @@ test("nenhum link interno aponta para rota removida", async () => {
     assert.doesNotMatch(html, /href="\/conteudos\/"/, String(file));
   }
 });
+
+test("publica somente o domínio canônico confirmado em URLs públicas", async () => {
+  const publicFiles = [
+    ...(await listHtmlFiles()),
+    new URL("../dist/robots.txt", import.meta.url),
+    new URL("../dist/sitemap-index.xml", import.meta.url),
+    new URL("../dist/sitemap-0.xml", import.meta.url),
+  ];
+
+  for (const file of publicFiles) {
+    const content = await readFile(file, "utf8");
+    assert.doesNotMatch(content, /adriana-reis-advocacia\.example/);
+    assert.doesNotMatch(
+      content,
+      /adrianareisadvocacia\.vercel\.app/,
+      `${file} não pode publicar o host de preview como entidade principal`,
+    );
+  }
+
+  const homepage = await readBuiltPage("index.html");
+  assert.match(
+    homepage,
+    /<link rel="canonical" href="https:\/\/www\.dradrireisadvocacia\.com\.br\/">/,
+  );
+});
+
+test("publica metadata Open Graph e Twitter completa com imagem canônica", async () => {
+  const html = await readBuiltPage("index.html");
+  const canonicalImage =
+    "https://www.dradrireisadvocacia.com.br/images/brand/adriana-reis-logo-wine.png";
+
+  assert.match(html, /property="og:title" content="[^"]+"/);
+  assert.match(html, /property="og:description" content="[^"]+"/);
+  assert.match(
+    html,
+    /property="og:url" content="https:\/\/www\.dradrireisadvocacia\.com\.br\/"/,
+  );
+  assert.match(
+    html,
+    new RegExp(`property="og:image" content="${canonicalImage}"`),
+  );
+  assert.match(html, /property="og:image:width" content="940"/);
+  assert.match(html, /property="og:image:height" content="460"/);
+  assert.match(
+    html,
+    /property="og:image:alt" content="Adriana Reis Advocacia"/,
+  );
+  assert.match(html, /name="twitter:card" content="summary_large_image"/);
+  assert.match(html, /name="twitter:title" content="[^"]+"/);
+  assert.match(html, /name="twitter:description" content="[^"]+"/);
+  assert.match(
+    html,
+    new RegExp(`name="twitter:image" content="${canonicalImage}"`),
+  );
+  assert.match(
+    html,
+    /name="twitter:image:alt" content="Adriana Reis Advocacia"/,
+  );
+});
+
+test("sitemap nativo lista somente a homepage indexável e robots aponta para ele", async () => {
+  const sitemapIndex = await readBuiltPage("sitemap-index.xml");
+  const sitemap = await readBuiltPage("sitemap-0.xml");
+  const robots = await readBuiltPage("robots.txt");
+
+  assert.match(
+    sitemapIndex,
+    /<loc>https:\/\/www\.dradrireisadvocacia\.com\.br\/sitemap-0\.xml<\/loc>/,
+  );
+  assert.deepEqual(
+    [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]),
+    ["https://www.dradrireisadvocacia.com.br/"],
+  );
+  assert.match(
+    robots,
+    /Sitemap: https:\/\/www\.dradrireisadvocacia\.com\.br\/sitemap-index\.xml/,
+  );
+});
+
+test("fotografia da seção Sobre não compete com a imagem LCP da hero", async () => {
+  const html = await readBuiltPage("index.html");
+  const aboutImage = html.match(
+    /<img[^>]+alt="Adriana Reis em seu ambiente profissional"[^>]*>/,
+  )?.[0];
+
+  assert.ok(aboutImage);
+  assert.match(aboutImage, /loading="lazy"/);
+  assert.doesNotMatch(aboutImage, /fetchpriority="high"/);
+});
+
+test("homepage publica um único grafo JSON-LD factual e parseável", async () => {
+  const html = await readBuiltPage("index.html");
+  const scripts = [
+    ...html.matchAll(
+      /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
+    ),
+  ];
+
+  assert.equal(scripts.length, 1);
+  const graph = JSON.parse(scripts[0][1]);
+  assert.equal(graph["@context"], "https://schema.org");
+  assert.deepEqual(
+    graph["@graph"].map((entity) => entity["@id"]),
+    [
+      "https://www.dradrireisadvocacia.com.br/#website",
+      "https://www.dradrireisadvocacia.com.br/#webpage",
+      "https://www.dradrireisadvocacia.com.br/#legal-service",
+      "https://www.dradrireisadvocacia.com.br/#person",
+    ],
+  );
+  assert.deepEqual(
+    graph["@graph"].map((entity) => entity["@type"]),
+    ["WebSite", "WebPage", "LegalService", "Person"],
+  );
+  assert.match(JSON.stringify(graph), /Adriana Rodrigues Reis de Andrade/);
+  assert.match(JSON.stringify(graph), /OAB\/SP nº 533\.644/);
+
+  const forbiddenProperties = [
+    "aggregateRating",
+    "review",
+    "award",
+    "sameAs",
+    "email",
+    "address",
+    "openingHours",
+    "priceRange",
+    "alumniOf",
+  ];
+  for (const property of forbiddenProperties) {
+    assert.ok(
+      graph["@graph"].every((entity) => !(property in entity)),
+      `JSON-LD não deve publicar ${property}`,
+    );
+  }
+});
+
+test("llms.txt v2 descreve somente recursos reais e é descoberto pela homepage", async () => {
+  const html = await readBuiltPage("index.html");
+  const llms = await readBuiltPage("llms.txt");
+  const base = "https://www.dradrireisadvocacia.com.br/";
+
+  assert.match(html, /<link rel="describedby" href="\/llms\.txt">/);
+  assert.doesNotMatch(html, /rel="alternate"[^>]+text\/markdown/);
+  assert.match(llms, /^# Adriana Reis Advocacia\n\n> /);
+  for (const fragment of [
+    "",
+    "#direito-civil",
+    "#direito-trabalhista",
+    "#direito-previdenciario",
+    "#sobre",
+    "#duvidas",
+    "#como-comecar",
+  ]) {
+    assert.match(llms, new RegExp(escapeRegExp(`${base}${fragment}`)));
+  }
+  assert.doesNotMatch(llms, /pol[ií]tica-de-privacidade/i);
+  assert.doesNotMatch(llms, /adriana-reis-advocacia\.example|vercel\.app/);
+});

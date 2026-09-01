@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://adriana-reis-advocacia.example/sitemap-index.xml

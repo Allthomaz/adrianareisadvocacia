@@ -1,10 +1,10 @@
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
+import { site } from "./src/data/site";
 
 export default defineConfig({
-  // Placeholder técnico: substituir apenas após a cliente confirmar o domínio.
-  site: "https://adriana-reis-advocacia.example",
+  site: site.url,
   output: "static",
   redirects: {
     "/sobre": "/#sobre",
@@ -15,7 +15,7 @@ export default defineConfig({
     "/contato": "/#como-comecar",
     "/conteudos": "/",
   },
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: (page) => page === `${site.url}/` })],
   vite: {
     plugins: [tailwindcss()],
   },

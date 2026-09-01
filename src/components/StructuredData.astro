@@ -1,0 +1,56 @@
+---
+import { site } from "../data/site";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const root = `${site.url}/`;
+const graph = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${root}#website`,
+      url: root,
+      name: site.name,
+      description: site.defaultDescription,
+      inLanguage: "pt-BR",
+      publisher: { "@id": `${root}#legal-service` },
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${root}#webpage`,
+      url: root,
+      name: title,
+      description,
+      inLanguage: "pt-BR",
+      isPartOf: { "@id": `${root}#website` },
+      mainEntity: { "@id": `${root}#legal-service` },
+      about: { "@id": `${root}#person` },
+    },
+    {
+      "@type": "LegalService",
+      "@id": `${root}#legal-service`,
+      url: root,
+      name: site.name,
+      description: site.defaultDescription,
+      image: `${site.url}/images/brand/adriana-reis-logo-wine.png`,
+    },
+    {
+      "@type": "Person",
+      "@id": `${root}#person`,
+      url: `${root}#sobre`,
+      name: site.professional.fullName,
+      jobTitle: "Advogada",
+      identifier: site.professional.oab.display,
+    },
+  ],
+};
+
+const serializedGraph = JSON.stringify(graph).replaceAll("<", "\\u003c");
+---
+
+<script is:inline type="application/ld+json" set:html={serializedGraph} />

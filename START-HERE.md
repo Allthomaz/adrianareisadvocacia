@@ -277,6 +277,17 @@ canal alfa real quando o ativo for um recorte.
    `astro.config.mjs`.
 5. Criar teste automatizado de rolagem para long tasks e regressões.
 
+## SEO, GEO e agent readiness
+
+Desde 2026-09-01, a URL canônica confirmada é
+`https://www.dradrireisadvocacia.com.br`. A homepage publica JSON-LD factual,
+descobre `/llms.txt` e registra três tools WebMCP somente leitura quando a API
+experimental estiver disponível. O sitemap nativo permanece em
+`/sitemap-index.xml` e contém somente a homepage.
+
+Consulte `docs/agent-readiness.md` antes de alterar metadata, sitemap, robots,
+structured data, `llms.txt`, headers ou WebMCP.
+
 ## Testes
 
 - `pnpm test:site` — build + `tests/site-content.test.mjs` (contratos de

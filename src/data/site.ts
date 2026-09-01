@@ -1,8 +1,7 @@
 export const site = {
   name: "Adriana Reis Advocacia",
   shortName: "Adriana Reis",
-  // Placeholder técnico: substituir apenas após a cliente confirmar o domínio.
-  url: "https://adriana-reis-advocacia.example",
+  url: "https://www.dradrireisadvocacia.com.br",
   defaultTitle: "Adriana Reis Advocacia",
   defaultDescription:
     "Atuação jurídica em Direito Civil, Trabalhista e Previdenciário, com informações institucionais e canal de contato.",
@@ -25,6 +24,8 @@ export const site = {
     email: null,
     phone: "+55 11 93353-5801",
     whatsapp: "+55 11 93353-5801",
+    description:
+      "Canal principal do escritório para apresentar brevemente uma situação.",
   },
 } as const;
 
